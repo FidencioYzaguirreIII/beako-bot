@@ -36,6 +36,7 @@ async def on_message(message):
     m = ncode_pattern.match(message.content.lower())
     if m:
         await utilities.from_ncode(m.group(3), m.group(4), message.channel)
+        return
     m = bot_pattern.match(message.content.lower())
     if not m:
         return
@@ -50,7 +51,7 @@ async def on_message(message):
             if not ch:
                 await message.channel.send("Send ncode link to get text.")
                 return
-            novel, chapter = parse_novel(ch.group(1), ch.group(2))
+            novel, chapter = utilities.parse_novel(ch.group(1), ch.group(2))
             await utilities.from_ncode(novel, chapter, message.channel)
         else:
             await utilities.from_ncode(link.group(3), link.group(4), message.channel)
@@ -92,6 +93,8 @@ async def on_message(message):
             chapters = filter(lambda l: re.match(r'arc7-ch[0-9]+-en.txt',l), files)
             chaps = '\n'.join(chapters)
             await message.channel.send(f'Available files: \n{chaps}')
+    else:
+        utilities.chat_bot(message)
 
 
 # @client.event

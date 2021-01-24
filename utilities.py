@@ -33,9 +33,9 @@ async def from_ncode(novel, chapter, channel, filename=None, upload_file=True):
     except scrapper.NoChapterException:
         await channel.send('The requested chapter is not available.')
         return None
-    except:
+    except Exception as e:
         await channel.send('Something went wrong, message thevoidzero.')
-        return None
+        raise e
 
 
 async def mtl_ncode(novel, chapter, channel, outfile=None):
