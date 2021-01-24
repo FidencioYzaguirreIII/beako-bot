@@ -4,7 +4,6 @@ import discord
 import scrapper
 import utilities
 
-from dotenv import load_dotenv
 
 bot_pattern = re.compile(r"b! +([a-zA-Z0-9-]+) ?(.*)")
 ncode_pattern = re.compile(r'(https?://)?(ncode.syosetu.com/?)?([a-z0-9]+)/([0-9]+)/?')
@@ -17,8 +16,7 @@ if not os.path.isdir('./data'):
 if not os.path.isdir('./rezero'):
     os.mkdir('rezero')
 
-load_dotenv()
-token = os.getenv('DISCORD_TOKEN')
+token = os.environ.get('DISCORD_TOKEN')
 
 client = discord.Client()
 
