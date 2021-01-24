@@ -1,0 +1,4 @@
+selenium
+discord
+beautifulsoup4
+requests
