@@ -48,7 +48,7 @@ async def on_message(message):
             if not ch:
                 await message.channel.send("Send ncode link to get text.")
                 return
-            novel, chapter = parse_novel(ch.group(1), ch.group(2))
+            novel, chapter = utilities.parse_novel(ch.group(1), ch.group(2))
             await utilities.from_ncode(novel, chapter, message.channel)
         else:
             await utilities.from_ncode(link.group(3), link.group(4), message.channel)
