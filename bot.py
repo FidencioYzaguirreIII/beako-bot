@@ -3,8 +3,6 @@ import re
 import discord
 import commands
 
-from dotenv import load_dotenv
-
 bot_pattern = re.compile(r"b! +([a-zA-Z0-9-]+) ?(.*)")
 
 if not os.path.isdir('./data'):
@@ -12,8 +10,7 @@ if not os.path.isdir('./data'):
 if not os.path.isdir('./tables'):
     os.mkdir('tables')
 
-load_dotenv()
-token = os.getenv('DISCORD_TOKEN')
+token = os.environ.get('DISCORD_TOKEN')
 
 client = discord.Client()
 
