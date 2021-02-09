@@ -16,7 +16,7 @@ replacements = './replacements.json'
 
 load_dotenv()
 
-def close_web():
+async def close_web():
     global web
     if web:
         web.close()
