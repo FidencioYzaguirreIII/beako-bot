@@ -5,10 +5,8 @@ import commands
 
 bot_pattern = re.compile(r"b! +([a-zA-Z0-9-]+) ?(.*)")
 
-if not os.path.isdir('./data'):
-    os.mkdir('data')
 if not os.path.isdir('./tables'):
-    os.mkdir('tables')
+    os.mkdir('./tables')
 
 token = os.environ.get('DISCORD_TOKEN')
 

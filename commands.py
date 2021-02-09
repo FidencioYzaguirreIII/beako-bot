@@ -57,7 +57,7 @@ def new_chapter(chapter, sections):
     return 'Chapter Added to the database'
 
 
-def assign_to(name, chapter, section, part):
+def assign_to(name, chapter, section, part, assist=False):
     with open(STATUS_FILE, 'r') as r:
         status = json.load(r)
     try:
@@ -70,14 +70,19 @@ def assign_to(name, chapter, section, part):
         chap['status'] = 'In Progress'
         sec = chap['assignments'][part][section]
         try:
-            return f'Already assigned to :{sec["assignee"]}'
+            msg = f'Already assigned to :{sec["assignee"]}'
+            if not assist:
+                return msg
+            sec['assignee'] += f'; {name}'
+            msg += f'Adding {name} for assist.'
         except KeyError:
             sec['assignee'] = name
             sec['progress'] = 'Assigned'
+            msg = f'{part} for Chapter-{chapter}, Section-{section}' +\
+                f' assigned to {name}.'
     with open(STATUS_FILE, 'w') as w:
         json.dump(status, w)
-    return f'{part} for Chapter-{chapter}, Section-{section} assigned ' +\
-        f'to {name}.'
+    return msg
 
 
 def mark_completed(chapter, section=None, part=None):
@@ -86,7 +91,7 @@ def mark_completed(chapter, section=None, part=None):
     chap = status[chapter]
     if section is None and part is None:
         if chap['status'] == 'Completed':
-            msg =  f'Chapter-{chapter} was already marked as completed.'
+            msg = f'Chapter-{chapter} was already marked as completed.'
         else:
             chap['status'] = 'Completed'
             msg = f'Chapter-{chapter} marked as completed.'
@@ -140,8 +145,16 @@ def get_work(work_str):
     return ''
 
 
-async def cmd_assign(message, args):
-    "Assign given chapter and section to someone or yourself."
+async def cmd_assign(message, args, assist=False):
+    """Assign given chapter and section to someone or yourself.
+Usage: completed <cs-string> <work> <person>
+Arguments:
+    <cs-string> : chapter & section in c#s# format.
+    <work>      : Translation, Proofreading, or Japanese. You can also use short version (t, p & j)
+    <person>    : The person it is assigned to, if not mentioned the one who sent the message will be assigned.
+the section and chapter number can contain range like 1-5 for from 1 to 5, or 3,5 for 3 and 5.
+e.g. assign c9s1 t void; assign c8s3 t; etc.
+    """
     m = re.match(r'([cs0-9,-]+) ([A-Za-z]+) ?[@]?([\w]+)?', args)
     if not m:
         await message.channel.send('Incorrect formatting for command.')
@@ -163,8 +176,23 @@ async def cmd_assign(message, args):
             await message.channel.send(assign_to(assignee, c, s, work))
 
 
+async def cmd_assist(message, args):
+    """Same as assign but adds the person as assist to already available one.
+Usage: assist <cs-string> <work> <person>
+Look help assign for other information.
+    """
+    await cmd_assign(message, args, assist=True)
+
+
 async def cmd_completed(message, args):
-    "Mark given chapter and section completed."
+    """Mark given chapter and section completed.
+Usage: completed <cs-string> <work>
+Arguments:
+    <cs-string> : chapter & section in c#s# format.
+    <work>      : Translation, Proofreading, or Japanese. You can also use short version (t, p & j)
+the section and chapter number can contain range like 1-5 for from 1 to 5, or 3,5 for 3 and 5.
+e.g. completed c9s1 t; completed c8s3 t; etc.
+    """
     m = re.match(r'([cs0-9,-]+) ?([A-Za-z]+)?', args)
     if not m:
         await message.channel.send('Incorrect formatting for command.')
@@ -201,7 +229,11 @@ Arguments:
 
 
 async def cmd_status(message, args):
-    "Current chapters progress and other things."
+    """Current chapters progress and other things.
+Usage: status <chapter>
+Arguments:
+    <chapter> : chapter number to see the status of. defaults to all.
+"""
     if args.strip() == '':
         msg = get_status()
     else:
@@ -213,12 +245,21 @@ async def cmd_status(message, args):
 
 
 async def cmd_hello(message, args):
-    "Hello message back to the user."
+    """Hello message back to the user.
+Usage: hello
+No arguments: 
+You can use this command to check if the bot is online or not.
+    """
     await message.channel.send(f"Hello {message.author}")
 
 
 async def cmd_help(message, args):
-    "The help message with available commands for the bot."
+    """The help message with available commands for the bot.
+Usage: help <topic>
+Arguments:
+    <topic> : Can be any command or non for brief help of all commands.
+e.g: help help; help add; etc.
+"""
     if args.strip() == '':
         msg = 'This bot can be used to manage the assignments of the works.\n'
         msg += 'Available commands:\n'
