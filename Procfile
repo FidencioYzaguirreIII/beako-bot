@@ -1,1 +1,1 @@
-worker: python ncode.py
+worker: python bot.py
