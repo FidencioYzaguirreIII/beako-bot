@@ -183,7 +183,12 @@ async def cmd_completed(message, args):
 
 
 async def cmd_add(message, args):
-    "Adds the chapter to the database."
+    """Adds the chapter to the database.
+Usage: add <chapter> <sections>
+Arguments:
+    <chapter> : chapter number.
+    <section> : number of sections in this chapter.
+"""
     m = re.match(r'([0-9]+) ([0-9]+)', args)
     if not m:
         await message.channel.send("Incorrect formatting for the command.")
@@ -214,11 +219,19 @@ async def cmd_hello(message, args):
 
 async def cmd_help(message, args):
     "The help message with available commands for the bot."
-    msg = 'This bot downloads chapters from ncode website.\n'
-    msg += 'Available commands:\n'
-    commands = filter(lambda x: inspect.isfunction(x[1]) and
-                      x[0].startswith('cmd_'),
-                      inspect.getmembers(sys.modules[__name__]))
-    for name, func in commands:
-        msg += f'{name[4:]} - {func.__doc__}\n'
+    if args.strip() == '':
+        msg = 'This bot can be used to manage the assignments of the works.\n'
+        msg += 'Available commands:\n'
+        commands = filter(lambda x: inspect.isfunction(x[1]) and
+                          x[0].startswith('cmd_'),
+                          inspect.getmembers(sys.modules[__name__]))
+        for name, func in commands:
+            short_help = func.__doc__.split('\n')[0]
+            msg += f'{name[4:]} - {short_help}\n'
+    else:
+        try:
+            func = getattr(sys.modules[__name__], f'cmd_{args}')
+            msg = func.__doc__
+        except AttributeError:
+            msg = 'Requested command is not available'
     await message.channel.send(msg)
