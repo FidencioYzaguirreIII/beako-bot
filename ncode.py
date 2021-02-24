@@ -10,7 +10,7 @@ bot_pattern = re.compile(r"b! +([a-zA-Z0-9-]+) ?(.*)")
 ncode_pattern = re.compile(r'(https?://)?(ncode.syosetu.com/?)?([a-z0-9]+)/([0-9]+)/?')
 chapter_pattern = re.compile(r'([a-z0-9]+) ?([0-9]+)')
 
-novels = {'rezero':'n2267be'}
+novels = {'rezero': 'n2267be'}
 
 if not os.path.isdir('./data'):
     os.mkdir('data')
@@ -67,15 +67,15 @@ async def on_message(message):
                 await utilities.mtl_ncode(novel, chapter, message.channel)
             else:
                 await utilities.mtl_ncode(link.group(3), link.group(4), message.channel)
-        elif cmd == 'arc7jp':
-            chap = int(args) + 502
-            await utilities.from_ncode(novels['rezero'], chap,
-                             message.channel, filename=f'./rezero/arc7-ch{args}-jp.txt')
         else:
             files = os.listdir('./data')
             chapters = filter(lambda l: re.match(r'[a-z0-9]+_[0-9]+-en.txt',l), files)
             chaps = '\n'.join(chapters)
             await message.channel.send(f'Available files: \n{chaps}')
+    elif cmd == 'arc7jp':
+        chap = int(args) + 502
+        await utilities.from_ncode(novels['rezero'], chap,
+                         message.channel, filename=f'./rezero/arc7-ch{args}-jp.txt')
     elif cmd == 'arc7en':
         if args:
             if args.isnumeric():
@@ -94,7 +94,7 @@ async def on_message(message):
             chaps = '\n'.join(chapters)
             await message.channel.send(f'Available files: \n{chaps}')
     else:
-        utilities.chat_bot(message)
+        await utilities.chat_bot(message)
 
 
 # @client.event
