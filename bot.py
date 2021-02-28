@@ -7,13 +7,15 @@ from dotenv import load_dotenv
 
 bot_pattern = re.compile(r"b! +([a-zA-Z0-9-]+) ?(.*)")
 
-if not os.path.isdir('./data'):
-    os.mkdir('data')
-if not os.path.isdir('./tables'):
-    os.mkdir('tables')
+root_path = "/home/Otto-Bot/Bot_Code/heretics-bot/"
 
-load_dotenv()
-token = os.getenv('DISCORD_TOKEN')
+if not os.path.isdir(os.path.join(root_path, 'data')):
+    os.mkdir(os.path.join(root_path, 'data'))
+if not os.path.isdir(os.path.join(root_path, 'tables')):
+    os.mkdir(os.path.join(root_path, 'tables'))
+
+load_dotenv(os.path.join(root_path, ".env"))
+token = os.env('DISCORD_TOKEN')
 
 client = discord.Client()
 
