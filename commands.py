@@ -8,7 +8,10 @@ import json
 import re
 
 import config
+import utilities
 
+ncode_pattern = re.compile(r'(https?://)?(ncode.syosetu.com/?)?([a-z0-9]+)/([0-9]+)/?')
+chapter_pattern = re.compile(r'([a-z0-9]+) ?([0-9]+)')
 STATUS_FILE = os.path.join(config.root_path, 'tables/status.json')
 if not os.path.isfile(STATUS_FILE):
     with open(STATUS_FILE, 'w') as w:
@@ -252,7 +255,43 @@ Usage: hello
 No arguments:
 You can use this command to check if the bot is online or not.
     """
-    await message.channel.send(f"Hello {message.author}")
+    await message.channel.send(f"Hello {message.author.name}")
+
+
+async def cmd_ncode(message, args):
+    """Download the chapter from ncode website
+Usage: ncode <ncode-link>
+    """
+    link = ncode_pattern.match(args)
+    if not link:
+        ch = chapter_pattern.match(args)
+        if not ch:
+            await message.channel.send("Send ncode link to get text.")
+            return
+        novel, chapter = utilities.parse_novel(ch.group(1), ch.group(2))
+        await utilities.from_ncode(novel, chapter, message.channel)
+    else:
+        await utilities.from_ncode(link.group(3),
+                                   link.group(4),
+                                   message.channel)
+
+
+async def cmd_mtl(message, args):
+    """Downloads the chapter and uploads a mtl from ncode website.
+Usage: mtl <ncode-link>
+    """
+    link = ncode_pattern.match(args)
+    if not link:
+        ch = chapter_pattern.match(args)
+        if not ch:
+            await message.channel.send("Send ncode link to get text.")
+            return
+        novel, chapter = utilities.parse_novel(ch.group(1), ch.group(2))
+        await utilities.mtl_ncode(novel, chapter, message.channel)
+    else:
+        await utilities.mtl_ncode(link.group(3),
+                                  link.group(4),
+                                  message.channel)
 
 
 async def cmd_help(message, args):
@@ -285,5 +324,9 @@ async def cmd_message(message, args):
 any commands.
 
     """
+    m = ncode_pattern.match(message.content.lower())
+    if m:
+        await utilities.from_ncode(m.group(3), m.group(4), message.channel)
+        return
     await message.channel.send('Command not recognized, please use' +
                                'help command to get the list.')
