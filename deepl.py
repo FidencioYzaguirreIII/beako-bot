@@ -1,22 +1,21 @@
 import os
 import re
-import time
 import asyncio
 import json
 
 import selenium
 from selenium import webdriver
 from dotenv import load_dotenv
+import config
 
 MAX_DELAY_SEC = 120
 MIN_DELAY_SEC = 5
 
 web = None
 
-root_path = '/home/gaurav/python/discord/'
-replacements = os.path.join(root_path, 'replacements.json')
+replacements = os.path.join(config.root_path, 'replacements.json')
 
-load_dotenv(dotenv_path=os.path.join(root_path, '.env'))
+load_dotenv(dotenv_path=os.path.join(config.root_path, '.env'))
 
 
 async def close_web():
@@ -35,7 +34,7 @@ async def init_web():
     prof.set_preference('useAutomationExtension', False)
     prof.update_preferences()
 
-    print(f'Opening web browser.')
+    print('Opening web browser.')
     web = webdriver.Firefox(
         firefox_profile=prof,
         firefox_options=opt,

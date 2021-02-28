@@ -5,6 +5,7 @@ import subprocess
 import discord
 import scrapper
 import deepl
+import config
 
 from shutil import copyfile
 from dotenv import load_dotenv
@@ -13,8 +14,7 @@ bot_pattern = re.compile(r"b! +([a-zA-Z0-9-]+) ?(.*)")
 ncode_pattern = re.compile(
     r'(https?://)?(ncode.syosetu.com/?)?([a-z0-9]+)/([0-9]+)/?')
 chapter_pattern = re.compile(r'([a-z0-9]+) ?([0-9]+)')
-root_path = '/home/gaurav/python/discord/'
-temp_file = os.path.join(root_path, '.temp_file')
+temp_file = os.path.join(config.root_path, '.temp_file')
 
 novels = {'rezero': 'n2267be'}
 # inform_guilds = [802505736218214420]  # my test server
@@ -29,7 +29,7 @@ async def send_file(channel, filename, msg=None):
 
 
 def send_message(msg=None, filename=None):
-    load_dotenv(dotenv_path=os.path.join(root_path, '.env'))
+    load_dotenv(dotenv_path=os.path.join(config.root_path, '.env'))
     token = os.getenv('DISCORD_TOKEN')
 
     asyncio.set_event_loop(asyncio.new_event_loop())
@@ -87,9 +87,9 @@ def check_new_episode():
     chapter = int(m.group(4)) + 1
     try:
         next_chap = scrapper.chap_url.substitute(novel=novel, chapter=chapter)
-        raw_file = os.path.join(root_path, f'data/{novel}_{chapter}-jp.txt')
+        raw_file = os.path.join(config.root_path, f'data/{novel}_{chapter}-jp.txt')
         scrapper.save_chapter(novel, chapter, filename=raw_file)
-        outfile = os.path.join(root_path, f'data/{novel}_{chapter}-en.txt')
+        outfile = os.path.join(config.root_path, f'data/{novel}_{chapter}-en.txt')
         if not os.path.exists(outfile):
             asyncio.run(deepl.init_web())
             asyncio.run(deepl.translate(raw_file, outfile))

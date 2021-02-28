@@ -2,20 +2,19 @@ import os
 import re
 import discord
 import commands
+import config
 
 from dotenv import load_dotenv
 
 bot_pattern = re.compile(r"b! +([a-zA-Z0-9-]+) ?(.*)")
 
-root_path = "/home/Otto-Bot/Bot_Code/heretics-bot/"
+if not os.path.isdir(os.path.join(config.root_path, 'data')):
+    os.mkdir(os.path.join(config.root_path, 'data'))
+if not os.path.isdir(os.path.join(config.root_path, 'tables')):
+    os.mkdir(os.path.join(config.root_path, 'tables'))
 
-if not os.path.isdir(os.path.join(root_path, 'data')):
-    os.mkdir(os.path.join(root_path, 'data'))
-if not os.path.isdir(os.path.join(root_path, 'tables')):
-    os.mkdir(os.path.join(root_path, 'tables'))
-
-load_dotenv(os.path.join(root_path, ".env"))
-token = os.env('DISCORD_TOKEN')
+load_dotenv(os.path.join(config.root_path, ".env"))
+token = os.getenv('DISCORD_TOKEN')
 
 client = discord.Client()
 
@@ -40,10 +39,8 @@ async def on_message(message):
     try:
         cmd_func = getattr(commands, f'cmd_{cmd.lower()}')
         await cmd_func(message, args)
-    except AttributeError as e:
-        await message.channel.send('Command not recognized, please use' +
-                                   'help command to get the list.')
-        raise e
+    except AttributeError:
+        await commands.cmd_message(message, args)
 
 
 if __name__ == '__main__':

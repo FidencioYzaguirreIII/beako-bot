@@ -7,7 +7,9 @@ import inspect
 import json
 import re
 
-STATUS_FILE = "./tables/status.json"
+import config
+
+STATUS_FILE = os.path.join(config.root_path, 'tables/status.json')
 if not os.path.isfile(STATUS_FILE):
     with open(STATUS_FILE, 'w') as w:
         w.write('{}')
@@ -222,3 +224,12 @@ async def cmd_help(message, args):
     for name, func in commands:
         msg += f'{name[4:]} - {func.__doc__}\n'
     await message.channel.send(msg)
+
+
+async def cmd_message(message, args):
+    """this function is to reply any messages that are not associated with
+    any commands.
+
+    """
+    await message.channel.send('Command not recognized, please use' +
+                               'help command to get the list.')

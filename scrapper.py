@@ -1,8 +1,10 @@
+
+import os
 import re
 import requests
 from bs4 import BeautifulSoup
-import re
 from string import Template
+import config
 
 chap_url = Template("http://ncode.syosetu.com/${novel}/${chapter}/")
 headers = {
@@ -41,7 +43,7 @@ def get_chapter(novel, chap_no):
 def save_chapter(novel, chap_no, filename=None):
     chaptitle, contents = get_chapter(novel, chap_no)
     if filename is None:
-        filename = f'./data/{novel}_{chap_no}.txt'
+        filename = os.path.join(config.root_path, f'data/{novel}_{chap_no}.txt')
     with open(filename, 'w') as w:
         file_content = f'* {chaptitle}\n{contents}'
         file_content = re.sub(r'\n+ *', '\n\n', file_content)
