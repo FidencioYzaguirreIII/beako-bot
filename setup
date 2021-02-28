@@ -1,0 +1,6 @@
+#! /bin/bash
+export DISCORD_TOKEN=ODAyNTAxMDQzNDE3MzgyOTMy.YAwJVg.gKIHaXqosWDRlw1wRaLNpOMvn50
+export DEEPL_EMAIL=heretictranslations@gmail.com
+export DEEPL_PASS=H-Translations1
+
+mkdir -p ./tables
