@@ -3,8 +3,11 @@ import re
 import discord
 import commands
 import config
+import time
 
 from dotenv import load_dotenv
+
+time.sleep(60)
 
 bot_pattern = re.compile(r"b! +([a-zA-Z0-9-]+) ?(.*)")
 

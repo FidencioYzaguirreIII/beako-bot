@@ -178,7 +178,7 @@ e.g. assign c9s1 t void; assign c8s3 t; etc.
         return
     for c in chap:
         for s in sec:
-            await message.channel.send(assign_to(assignee, c, s, work))
+            await message.channel.send(assign_to(assignee, c, s, work, assist))
 
 
 async def cmd_assist(message, args):

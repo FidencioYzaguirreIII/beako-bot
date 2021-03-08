@@ -10,7 +10,7 @@ import config
 
 MAX_DELAY_SEC = 120
 MIN_DELAY_SEC = 5
-
+#webdriver.Firefox(executable_path='/usr/local/bin/geckodriver')
 web = None
 
 replacements = os.path.join(config.root_path, 'replacements.json')

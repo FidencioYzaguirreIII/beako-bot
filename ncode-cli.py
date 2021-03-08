@@ -17,7 +17,7 @@ chapter_pattern = re.compile(r'([a-z0-9]+) ?([0-9]+)')
 temp_file = os.path.join(config.root_path, '.temp_file')
 
 novels = {'rezero': 'n2267be'}
-# inform_guilds = [802505736218214420]  # my test server
+#inform_guilds = [802505736218214420]  # my test server
 inform_guilds = [772947291606614026]  # Heretics
 
 
