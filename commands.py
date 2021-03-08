@@ -30,7 +30,7 @@ def get_status(chapter=None):
             return f'No Status for requested chapter: {chapter}'
         status = {chapter: status[chapter]}
     for chap, stat in status.items():
-        status_string += f'Chapter-{chap}: {stat["status"]}'
+        status_string += f'\nChapter-{chap}: {stat["status"]}'
         for work, data in stat["assignments"].items():
             status_string += f'\n  {work}:'
             for sec, status in data.items():
