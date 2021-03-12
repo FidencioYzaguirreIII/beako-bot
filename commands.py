@@ -358,7 +358,11 @@ Arguments:
     """
     if args.strip() == '':
         args = message.author.name
+    else:
+        args = args.strip('@ ')
+        if args.lower() == 'otto':
+            args = message.author.name
     with open(os.path.join(config.root_path, "./tables/roasts.txt")) as r:
         line = random.choice(r.readlines())
-    msg = Template(line).safe_substitute(user=args)
+    msg = Template(line).safe_substitute(user=args.capitalize())
     await message.channel.send(msg)
