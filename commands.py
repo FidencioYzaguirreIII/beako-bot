@@ -8,6 +8,7 @@ import json
 import re
 
 import config
+import requests
 import utilities
 
 ncode_pattern = re.compile(r'(https?://)?(ncode.syosetu.com/?)?([a-z0-9]+)/([0-9]+)/?')
@@ -330,3 +331,16 @@ any commands.
         return
     await message.channel.send('Command not recognized, please use' +
                                'help command to get the list.')
+
+
+async def cmd_joke(message, args):
+    """Get random jokes to lighten the channel.
+    """
+    headers = {
+        "Accept": "Application/json"
+    }
+    r = requests.get("https://icanhazdadjoke.com/", headers=headers)
+    if r.status_code == 200:
+        await message.channel.send(r.json()['joke'])
+    else:
+        await message.channel.send(f"Sorry something went wrong. {r.text}")
