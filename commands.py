@@ -6,6 +6,8 @@ import os
 import inspect
 import json
 import re
+import random
+from string import Template
 
 import config
 import requests
@@ -153,7 +155,7 @@ def get_work(work_str):
 
 async def cmd_assign(message, args, assist=False):
     """Assign given chapter and section to someone or yourself.
-Usage: completed <cs-string> <work> <person>
+Usage: assign <cs-string> <work> <person>
 Arguments:
     <cs-string> : chapter & section in c#s# format.
     <work>      : Translation, Proofreading, or Japanese. You can also use short version (t, p & j)
@@ -323,7 +325,8 @@ e.g: help help; help add; etc.
 async def cmd_message(message, args):
     """this function is to reply any messages that are not associated with
 any commands.
-
+Usage: message <your message>
+       OR just <your message that doesn't start with a command.> 
     """
     m = ncode_pattern.match(message.content.lower())
     if m:
@@ -335,6 +338,7 @@ any commands.
 
 async def cmd_joke(message, args):
     """Get random jokes to lighten the channel.
+Usage: joke
     """
     headers = {
         "Accept": "Application/json"
@@ -344,3 +348,17 @@ async def cmd_joke(message, args):
         await message.channel.send(r.json()['joke'])
     else:
         await message.channel.send(f"Sorry something went wrong. {r.text}")
+
+
+async def cmd_roast(message, args):
+    """roast someone or get roasted by the bot.
+Usage: roast <name>
+Arguments:
+    <name> person you want to roast. Default yourself.
+    """
+    if args.strip() == '':
+        args = message.author.name
+    with open(os.path.join(config.root_path, "./tables/roasts.txt")) as r:
+        line = random.choice(r.readlines())
+    msg = Template(line).safe_substitute(user=args)
+    await message.channel.send(msg)
