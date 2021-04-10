@@ -1,4 +1,5 @@
 import os
+import sys
 import re
 import discord
 import commands
@@ -7,9 +8,12 @@ import time
 
 from dotenv import load_dotenv
 
-time.sleep(60)
+if __name__ == "__main__":
+    if len(sys.argv) == 1 or sys.argv[1] != "-nd":
+        time.sleep(60)
 
 bot_pattern = re.compile(r"b! +([a-zA-Z0-9-]+) ?(.*)")
+log_file = os.path.expanduser("~/otto.log")
 
 if not os.path.isdir(os.path.join(config.root_path, 'data')):
     os.mkdir(os.path.join(config.root_path, 'data'))
@@ -39,12 +43,17 @@ async def on_message(message):
     cmd = m.group(1)
     args = m.group(2)
     print(f'Command: {cmd} Args: {args}')
+    with open(log_file, 'a') as lf:
+        lf.write(f'{cmd}: {args}\n')
     try:
         cmd_func = getattr(commands, f'cmd_{cmd.lower()}')
         await cmd_func(message, args)
-    except AttributeError:
-        await commands.cmd_message(message, args)
-
+    # except AttributeError:
+    #     await commands.cmd_message(message, args)
+    except Exception as e:
+        with open(log_file, 'a') as lf:
+            lf.write(f'{e}\n')
+            lf.write(str(e.__traceback__)+'\n')
 
 if __name__ == '__main__':
     client.run(token)

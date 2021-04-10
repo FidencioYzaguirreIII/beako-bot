@@ -12,6 +12,7 @@ MAX_DELAY_SEC = 120
 MIN_DELAY_SEC = 5
 #webdriver.Firefox(executable_path='/usr/local/bin/geckodriver')
 web = None
+log_file = os.path.expanduser("~/otto.log")
 
 replacements = os.path.join(config.root_path, 'replacements.json')
 
@@ -35,6 +36,8 @@ async def init_web():
     prof.update_preferences()
 
     print('Opening web browser.')
+    with open(log_file, 'a') as lf:
+        lf.write("web open")
     web = webdriver.Firefox(
         firefox_profile=prof,
         firefox_options=opt,
@@ -108,6 +111,8 @@ async def translate(input_file, output_file, paid=False):
     content = ''
     tl_doc = ''
     print(f'TRANSLATION: {len(lines)} lines file.')
+    with open(log_file, 'a') as lf:
+        lf.write(f'TRANSLATION: {len(lines)} lines file.\n')
     for i, line in enumerate(lines, start=1):
         if len(content) > LIMIT:
             tl_doc += await process_text(content) + '\n'

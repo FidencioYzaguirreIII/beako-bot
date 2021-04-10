@@ -12,6 +12,7 @@ from string import Template
 import config
 import requests
 import utilities
+import scrapper
 
 ncode_pattern = re.compile(r'(https?://)?(ncode.syosetu.com/?)?([a-z0-9]+)/([0-9]+)/?')
 chapter_pattern = re.compile(r'([a-z0-9]+) ?([0-9]+)')
@@ -135,7 +136,7 @@ def extract_range(range_str):
 
 
 def get_chapter_section(chap_sec_str):
-    m = re.match(r'c([0-9-,]+)s?([0-9-,]+)?', chap_sec_str)
+    m = re.match(r'c?([0-9-,]+)s?([0-9-,]+)?', chap_sec_str)
     if not m:
         return None, None
     elif not m.group(2):
@@ -238,15 +239,19 @@ Arguments:
 
 async def cmd_status(message, args):
     """Current chapters progress and other things.
-Usage: status <chapter>
+Usage: status c<chapter>
 Arguments:
-    <chapter> : chapter number to see the status of. defaults to all.
+    <chapter> : chapter number to see the status of. defaults to all,
+                use same format as cs string but section information is not used.
 """
     if args.strip() == '':
         msg = get_status()
     else:
         try:
-            msg = get_status(args.strip())
+            chap, sec = get_chapter_section(args.strip())
+            msg = ""
+            for c in chap:
+                msg += get_status(c) + '\n'
         except ValueError:
             message.channel.send('Incorrect Arguments to the command.')
     await message.channel.send(msg)
@@ -366,3 +371,12 @@ Arguments:
         line = random.choice(r.readlines())
     msg = Template(line).safe_substitute(user=args.capitalize())
     await message.channel.send(msg)
+
+
+async def cmd_ip(message, args):
+    """Gives the IP address of the bot to ssh into it.
+Usage: ip
+"""
+    soup = scrapper.get_soup("http://checkip.dyndns.org/")
+    ip = soup.find('body').text
+    await message.channel.send(ip)
