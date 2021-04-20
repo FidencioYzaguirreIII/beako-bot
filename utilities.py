@@ -28,7 +28,7 @@ async def from_ncode(novel, chapter, channel, filename=None, upload_file=True):
             await send_file(channel, filename)
         return filename
     url = scrapper.chap_url.substitute(novel=novel, chapter=chapter)
-    await channel.send(f'Just a sec, I\'ll go visit: {url}')
+    await channel.send(f'Just a sec, I\'ll go visit ncode website.')
     try:
         filename = scrapper.save_chapter(novel, chapter, filename=filename)
         if upload_file:

@@ -9,6 +9,7 @@ import time
 from dotenv import load_dotenv
 
 if __name__ == "__main__":
+    # delay just in case internet isn't connected at startup.
     if len(sys.argv) == 1 or sys.argv[1] != "-nd":
         time.sleep(60)
 
@@ -45,15 +46,22 @@ async def on_message(message):
     print(f'Command: {cmd} Args: {args}')
     with open(log_file, 'a') as lf:
         lf.write(f'{cmd}: {args}\n')
+    if '-m' in sys.argv:
+        # meaning manually reply.
+        rep = input("Enter reply<default>: ")
+        if rep.strip():
+            await message.reply(rep)
+            return
     try:
         cmd_func = getattr(commands, f'cmd_{cmd.lower()}')
         await cmd_func(message, args)
-    # except AttributeError:
-    #     await commands.cmd_message(message, args)
+    except AttributeError:
+        await commands.cmd_message(message, args)
     except Exception as e:
         with open(log_file, 'a') as lf:
             lf.write(f'{e}\n')
-            lf.write(str(e.__traceback__)+'\n')
+        print(f"Error logged to {log_file}")
+            # lf.write(str(e.__traceback__)+'\n')
 
 if __name__ == '__main__':
     client.run(token)

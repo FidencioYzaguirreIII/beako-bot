@@ -101,11 +101,19 @@ def check_new_episode():
     return outfile, chapter
 
 
+def get_chapter_number(num):
+    "Gets the chapter number for arc7"
+    if num < 516:
+        return num - 502
+    # EX chapter on 516, that's why
+    return num - 503
+
+
 if __name__ == '__main__':
     while True:
         doc, chap = check_new_episode()
         if not doc:
             break
         send_message("@everyone New chapter has been released.\n" +
-                     f"Here's the MTL for Rezero Arc7 Chapter-{chap-502}.",
+                     f"Here's the MTL for Rezero Arc7 Chapter-{get_chapter_number(chap)}.",
                      filename=doc)

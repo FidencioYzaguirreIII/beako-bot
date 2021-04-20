@@ -8,11 +8,13 @@ import json
 import re
 import random
 from string import Template
+import urllib.request
 
 import config
 import requests
 import utilities
 import scrapper
+import deepl
 
 ncode_pattern = re.compile(r'(https?://)?(ncode.syosetu.com/?)?([a-z0-9]+)/([0-9]+)/?')
 chapter_pattern = re.compile(r'([a-z0-9]+) ?([0-9]+)')
@@ -166,11 +168,11 @@ e.g. assign c9s1 t void; assign c8s3 t; etc.
     """
     m = re.match(r'([cs0-9,-]+) ([A-Za-z]+) ?[@]?([\w]+)?', args)
     if not m:
-        await message.channel.send('Incorrect formatting for command.')
+        await message.reply('Incorrect formatting for command.')
         return
     work = get_work(m.group(2))
     if work == '':
-        await message.channel.send('Incorrect formatting for command.')
+        await message.reply('Incorrect formatting for command.')
         return
     if not m.group(3):
         assignee = str(message.author)
@@ -178,11 +180,11 @@ e.g. assign c9s1 t void; assign c8s3 t; etc.
         assignee = m.group(3)
     chap, sec = get_chapter_section(m.group(1))
     if chap is None or sec is None:
-        await message.channel.send('Incorrect formatting for command.')
+        await message.reply('Incorrect formatting for command.')
         return
     for c in chap:
         for s in sec:
-            await message.channel.send(assign_to(assignee, c, s, work, assist))
+            await message.reply(assign_to(assignee, c, s, work, assist))
 
 
 async def cmd_assist(message, args):
@@ -204,19 +206,19 @@ e.g. completed c9s1 t; completed c8s3 t; etc.
     """
     m = re.match(r'([cs0-9,-]+) ?([A-Za-z]+)?', args)
     if not m:
-        await message.channel.send('Incorrect formatting for command.')
+        await message.reply('Incorrect formatting for command.')
         return
     work = get_work(m.group(2))
     chap, sec = get_chapter_section(m.group(1))
     if chap is None:
-        await message.channel.send('Incorrect formatting for command.')
+        await message.reply('Incorrect formatting for command.')
         return
     if sec is None:
         for c in chap:
-            await message.channel.send(mark_completed(c))
+            await message.reply(mark_completed(c))
     for c in chap:
         for s in sec:
-            await message.channel.send(mark_completed(c, s, work))
+            await message.reply(mark_completed(c, s, work))
 
 
 async def cmd_add(message, args):
@@ -228,13 +230,13 @@ Arguments:
 """
     m = re.match(r'([0-9]+) ([0-9]+)', args)
     if not m:
-        await message.channel.send("Incorrect formatting for the command.")
+        await message.reply("Incorrect formatting for the command.")
     try:
         chapter = int(m.group(1))
         section = int(m.group(2))
-        await message.channel.send(new_chapter(chapter, section))
+        await message.reply(new_chapter(chapter, section))
     except ValueError:
-        await message.channel.send('Use numbers for chapters and sections')
+        await message.reply('Use numbers for chapters and sections')
 
 
 async def cmd_status(message, args):
@@ -253,8 +255,8 @@ Arguments:
             for c in chap:
                 msg += get_status(c) + '\n'
         except ValueError:
-            message.channel.send('Incorrect Arguments to the command.')
-    await message.channel.send(msg)
+            message.reply('Incorrect Arguments to the command.')
+    await message.reply(msg)
 
 
 async def cmd_hello(message, args):
@@ -263,7 +265,7 @@ Usage: hello
 No arguments:
 You can use this command to check if the bot is online or not.
     """
-    await message.channel.send(f"Hello {message.author.name}")
+    await message.reply(f"Hello {message.author.name}")
 
 
 async def cmd_ncode(message, args):
@@ -274,7 +276,7 @@ Usage: ncode <ncode-link>
     if not link:
         ch = chapter_pattern.match(args)
         if not ch:
-            await message.channel.send("Send ncode link to get text.")
+            await message.reply("Send ncode link to get text.")
             return
         novel, chapter = utilities.parse_novel(ch.group(1), ch.group(2))
         await utilities.from_ncode(novel, chapter, message.channel)
@@ -292,7 +294,7 @@ Usage: mtl <ncode-link>
     if not link:
         ch = chapter_pattern.match(args)
         if not ch:
-            await message.channel.send("Send ncode link to get text.")
+            await message.reply("Send ncode link to get text.")
             return
         novel, chapter = utilities.parse_novel(ch.group(1), ch.group(2))
         await utilities.mtl_ncode(novel, chapter, message.channel)
@@ -300,6 +302,33 @@ Usage: mtl <ncode-link>
         await utilities.mtl_ncode(link.group(3),
                                   link.group(4),
                                   message.channel)
+    await message.reply("There you go. Have Fun.")
+
+
+async def cmd_deepl(message, args):
+    """Uses deepl website to translate a plain text file.
+
+Usage: deepl <attachment>
+
+    <attachment>: A plain text file in utf-8 encoding.
+"""
+    await message.reply("it might take a while, I'll ping you when I'm done.")
+    for attch in message.attachments:
+        print(attch)
+        if 'text/plain' not in attch.content_type:
+            await message.reply("Please send a plain text file")
+            return
+        temp_og_file = f"/tmp/{attch.filename}"
+        temp_tl_file = f"/tmp/tl-{attch.filename}"
+        with open(temp_og_file, "w") as w:
+            r = requests.get(attch.url)
+            r.encoding = 'utf-8'
+            w.write(r.text)
+        await deepl.init_web()
+        await deepl.translate(temp_og_file, temp_tl_file)
+        await deepl.close_web()
+        await message.reply("Here you go")
+        await utilities.send_file(message.channel, temp_tl_file)
 
 
 async def cmd_help(message, args):
@@ -324,7 +353,7 @@ e.g: help help; help add; etc.
             msg = func.__doc__
         except AttributeError:
             msg = 'Requested command is not available'
-    await message.channel.send(msg)
+    await message.reply(msg)
 
 
 async def cmd_message(message, args):
@@ -337,7 +366,7 @@ Usage: message <your message>
     if m:
         await utilities.from_ncode(m.group(3), m.group(4), message.channel)
         return
-    await message.channel.send('Command not recognized, please use' +
+    await message.reply('Command not recognized, please use' +
                                'help command to get the list.')
 
 
@@ -350,9 +379,9 @@ Usage: joke
     }
     r = requests.get("https://icanhazdadjoke.com/", headers=headers)
     if r.status_code == 200:
-        await message.channel.send(r.json()['joke'])
+        await message.reply(r.json()['joke'])
     else:
-        await message.channel.send(f"Sorry something went wrong. {r.text}")
+        await message.reply(f"Sorry something went wrong. {r.text}")
 
 
 async def cmd_roast(message, args):
@@ -370,7 +399,7 @@ Arguments:
     with open(os.path.join(config.root_path, "./tables/roasts.txt")) as r:
         line = random.choice(r.readlines())
     msg = Template(line).safe_substitute(user=args.capitalize())
-    await message.channel.send(msg)
+    await message.reply(msg)
 
 
 async def cmd_ip(message, args):
@@ -379,4 +408,4 @@ Usage: ip
 """
     soup = scrapper.get_soup("http://checkip.dyndns.org/")
     ip = soup.find('body').text
-    await message.channel.send(ip)
+    await message.reply(ip)

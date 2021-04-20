@@ -1,4 +1,5 @@
 import os
+import sys
 import re
 import asyncio
 import json
@@ -95,8 +96,10 @@ def replace_words(text):
 
     text = re.sub(r'\n\n+', '\n\n', text)
     for k, v in rep.items():
-        print(f'REPLACE: {k}-->{v}')
-        text = text.replace(k, v)
+        n = text.count(k)
+        if n > 0:
+            print(f'REPLACE: {k}-->{v} ({n})')
+            text = text.replace(k, v)
     return text
 
 
@@ -126,3 +129,15 @@ async def translate(input_file, output_file, paid=False):
     with open(output_file, 'w') as w:
         w.write(tl_doc)
     print(f'Written to {output_file}')
+
+
+if __name__ == '__main__':
+    if len(sys.argv) < 3:
+        print(f"Usage: {sys.argv[0]} <input file> <output file>")
+        sys.exit(0)
+    mainl = asyncio.new_event_loop()
+    asyncio.set_event_loop(mainl)
+    asyncio.run(init_web())
+    asyncio.run(translate(sys.argv[1], sys.argv[2]))
+    asyncio.run(close_web())
+    
