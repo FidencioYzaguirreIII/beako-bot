@@ -9,6 +9,7 @@ import re
 import random
 from string import Template
 import urllib.request
+from urllib.parse import urlparse
 
 import config
 import requests
@@ -64,7 +65,7 @@ def new_chapter(chapter, sections):
         )
     )
     with open(STATUS_FILE, 'w') as w:
-        json.dump(status, w)
+        json.dump(status, w, indent=2)
     return 'Chapter Added to the database'
 
 
@@ -92,7 +93,7 @@ def assign_to(name, chapter, section, part, assist=False):
             msg = f'{part} for Chapter-{chapter}, Section-{section}' +\
                 f' assigned to {name}.'
     with open(STATUS_FILE, 'w') as w:
-        json.dump(status, w)
+        json.dump(status, w, indent=2)
     return msg
 
 
@@ -113,7 +114,7 @@ def mark_completed(chapter, section=None, part=None):
         except KeyError:
             return 'Given chapter or section not found.'
     with open(STATUS_FILE, 'w') as w:
-        json.dump(status, w)
+        json.dump(status, w, indent=2)
     return msg
 
 
@@ -409,3 +410,10 @@ Usage: ip
     soup = scrapper.get_soup("http://checkip.dyndns.org/")
     ip = soup.find('body').text
     await message.reply(ip)
+
+
+async def cmd_dark(message, args):
+    soup = scrapper.get_soup("http://checkip.dyndns.org/")
+    ip = soup.find('body').text.split(" ")[-1]
+    path = urlparse(args).path
+    await message.reply(f"Visit: http://{ip}:5006{path}")
