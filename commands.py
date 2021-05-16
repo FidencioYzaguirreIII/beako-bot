@@ -10,6 +10,7 @@ import random
 from string import Template
 import urllib.request
 from urllib.parse import urlparse
+import subprocess
 
 import config
 import requests
@@ -20,6 +21,8 @@ import deepl
 ncode_pattern = re.compile(r'(https?://)?(ncode.syosetu.com/?)?([a-z0-9]+)/([0-9]+)/?')
 chapter_pattern = re.compile(r'([a-z0-9]+) ?([0-9]+)')
 STATUS_FILE = os.path.join(config.root_path, 'tables/status.json')
+TEMP_FILE = os.path.join(config.root_path, '.temp_file')
+
 if not os.path.isfile(STATUS_FILE):
     with open(STATUS_FILE, 'w') as w:
         w.write('{}')
@@ -280,11 +283,11 @@ Usage: ncode <ncode-link>
             await message.reply("Send ncode link to get text.")
             return
         novel, chapter = utilities.parse_novel(ch.group(1), ch.group(2))
-        await utilities.from_ncode(novel, chapter, message.channel)
+        await utilities.from_ncode(novel, chapter, message)
     else:
         await utilities.from_ncode(link.group(3),
                                    link.group(4),
-                                   message.channel)
+                                   message)
 
 
 async def cmd_mtl(message, args):
@@ -298,12 +301,11 @@ Usage: mtl <ncode-link>
             await message.reply("Send ncode link to get text.")
             return
         novel, chapter = utilities.parse_novel(ch.group(1), ch.group(2))
-        await utilities.mtl_ncode(novel, chapter, message.channel)
+        await utilities.mtl_ncode(novel, chapter, message)
     else:
         await utilities.mtl_ncode(link.group(3),
                                   link.group(4),
-                                  message.channel)
-    await message.reply("There you go. Have Fun.")
+                                  message)
 
 
 async def cmd_deepl(message, args):
@@ -328,9 +330,78 @@ Usage: deepl <attachment>
         await deepl.init_web()
         await deepl.translate(temp_og_file, temp_tl_file)
         await deepl.close_web()
-        await message.reply("Here you go")
-        await utilities.send_file(message.channel, temp_tl_file)
+        await utilities.reply_file(message, temp_tl_file, "Here you go")
 
+
+async def cmd_check(message, args):
+    """checks if the new episode is out or not.
+
+Usage: check
+
+No arguments.
+    """
+    with open(TEMP_FILE, 'r') as r:
+        url = r.read().strip()
+    m = ncode_pattern.match(url)
+    novel = m.group(3)
+    chapter = int(m.group(4)) + 1
+    try:
+        next_chap = scrapper.chap_url.substitute(novel=novel, chapter=chapter)
+        raw_file = os.path.join(config.root_path, f'data/{novel}_{chapter}-jp.txt')
+        scrapper.save_chapter(novel, chapter, filename=raw_file)
+    except scrapper.NoChapterException:
+        await message.reply("Sorry there are no new chapters in the website.")
+        return
+    
+    await message.reply("The new chapter is out, you can check it in the" +
+                        f" link:\n{next_chap}\n use `mtl {novel}/{chapter}`" +
+                        " command if you want mtl for the new chapter")
+    with open(TEMP_FILE, 'w') as w:
+        w.write(next_chap)
+
+
+async def cmd_diff(message, args):
+    """Checks if the given chapter had had any revisions since the last check.
+
+Usage: diff <ncode_link>
+
+    <ncode_link>: url of the ncode website to find the chapter on.
+    """
+    link = ncode_pattern.match(args)
+    if not link:
+        ch = chapter_pattern.match(args)
+        if not ch:
+            await message.reply("Send ncode link to get text.")
+            return
+        novel, chapter = utilities.parse_novel(ch.group(1), ch.group(2))
+    else:
+        novel, chapter = utilities.parse_novel(link.group(3), link.group(4))
+
+    new_file = f'/tmp/{novel}_{chapter}-jp.txt'
+    old_file = os.path.join(config.root_path, f'data/{novel}_{chapter}-jp.txt')
+    if not os.path.exists(old_file):
+        await message.reply("Old copy to check for the revisions doesn't exist, sorry.")
+        return
+    scrapper.save_chapter(novel, chapter, filename=new_file)
+    process = subprocess.Popen(f'git diff {old_file} {new_file}',
+                               shell=True,
+                               stdout=subprocess.PIPE,
+                               stderr=subprocess.PIPE)
+    out, err = process.communicate()
+    diff = out.decode()
+    if (len(diff.split('\n'))) < 5:
+        await message.reply("No significant changes in this chapter.")
+        return
+    copyfile(new_file, old_file)
+    w = open(f"/tmp/ch-{chapter}.diff","w")
+    w.write(diff)
+    w.close()
+    await utilities.reply_file(message, filename=f"/tmp/ch-{chapter}.diff",
+                              content="The changes are in this Diff file.")
+    
+
+
+# UTILITIES AND OTHER FUNCTIONS FROM HERE ONWARDS
 
 async def cmd_help(message, args):
     """The help message with available commands for the bot.
@@ -365,7 +436,7 @@ Usage: message <your message>
     """
     m = ncode_pattern.match(message.content.lower())
     if m:
-        await utilities.from_ncode(m.group(3), m.group(4), message.channel)
+        await utilities.from_ncode(m.group(3), m.group(4), message)
         return
     await message.reply('Command not recognized, please use' +
                                'help command to get the list.')
@@ -413,6 +484,8 @@ Usage: ip
 
 
 async def cmd_dark(message, args):
+    """gives a link to the dark website curresponsing to the heretics website link.
+    """
     soup = scrapper.get_soup("http://checkip.dyndns.org/")
     ip = soup.find('body').text.split(" ")[-1]
     path = urlparse(args).path

@@ -1,1 +1,3 @@
-root_path = "/home/Otto-Bot/Bot_Code/heretics-bot/"
+import os
+root_path = os.path.dirname(__file__)
+

@@ -52,9 +52,9 @@ async def on_message(message):
                 await message.channel.send("Send ncode link to get text.")
                 return
             novel, chapter = utilities.parse_novel(ch.group(1), ch.group(2))
-            await utilities.from_ncode(novel, chapter, message.channel)
+            await utilities.from_ncode(novel, chapter, message)
         else:
-            await utilities.from_ncode(link.group(3), link.group(4), message.channel)
+            await utilities.from_ncode(link.group(3), link.group(4), message)
     elif cmd == 'deepl':
         if args:
             link = ncode_pattern.match(args)
@@ -64,9 +64,9 @@ async def on_message(message):
                     await message.channel.send("Send ncode link to get text.")
                     return
                 novel, chapter = utilities.parse_novel(ch.group(1), ch.group(2))
-                await utilities.mtl_ncode(novel, chapter, message.channel)
+                await utilities.mtl_ncode(novel, chapter, message)
             else:
-                await utilities.mtl_ncode(link.group(3), link.group(4), message.channel)
+                await utilities.mtl_ncode(link.group(3), link.group(4), message)
         else:
             files = os.listdir('./data')
             chapters = filter(lambda l: re.match(r'[a-z0-9]+_[0-9]+-en.txt',l), files)
@@ -75,7 +75,7 @@ async def on_message(message):
     elif cmd == 'arc7jp':
         chap = int(args) + 502
         await utilities.from_ncode(novels['rezero'], chap,
-                         message.channel, filename=f'./rezero/arc7-ch{args}-jp.txt')
+                         message, filename=f'./rezero/arc7-ch{args}-jp.txt')
     elif cmd == 'arc7en':
         if args:
             if args.isnumeric():
@@ -83,11 +83,11 @@ async def on_message(message):
             else:
                 filename = args
             if os.path.isfile(filename):
-                await utilities.send_file(message.channel, filename)
+                await utilities.reply_file(message, filename)
             else:
                 chap = int(args) + 502
                 await utilities.mtl_ncode(novels['rezero'], chap,
-                         message.channel, outfile=filename)
+                         message, outfile=filename)
         else:
             files = os.listdir('./rezero')
             chapters = filter(lambda l: re.match(r'arc7-ch[0-9]+-en.txt',l), files)
