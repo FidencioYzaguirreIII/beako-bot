@@ -21,7 +21,7 @@ import deepl
 ncode_pattern = re.compile(r'(https?://)?(ncode.syosetu.com/?)?([a-z0-9]+)/([0-9]+)/?')
 chapter_pattern = re.compile(r'([a-z0-9]+) ?([0-9]+)')
 STATUS_FILE = os.path.join(config.root_path, 'tables/status.json')
-TEMP_FILE = os.path.join(config.root_path, '.temp_file')
+TEMP_FILE = os.path.join(config.root_path, '.temp_file')  # move to config
 
 if not os.path.isfile(STATUS_FILE):
     with open(STATUS_FILE, 'w') as w:

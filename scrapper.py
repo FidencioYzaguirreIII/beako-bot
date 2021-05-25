@@ -17,13 +17,16 @@ class NoChapterException(Exception):
     pass
 
 
-def get_soup(url):
-    print(f'connecting...{url}')
+def get_soup(url, verbose=False):
+    if verbose:
+        print(f'connecting...{url}', end='')
     r = requests.get(url, headers=headers)
     if r.status_code == 404:
-        print('404 Error.')
+        if verbose:
+            print(': 404 Error.')
         raise NoChapterException
-    print(':Connected:')
+    if verbose:
+        print(':Connected.')
     return BeautifulSoup(r.text, 'html.parser')
 
 
