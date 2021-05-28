@@ -4,11 +4,9 @@ import scrapper
 import deepl
 import config
 
-novels = {'rezero': 'n2267be'}
-
 
 def parse_novel(title, chapter):
-    title = novels.get(title, title)
+    title = config.novels.get(title, title)
     return title, chapter
 
 
