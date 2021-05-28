@@ -209,7 +209,6 @@ Usage: deepl <attachment>
 """
     await message.reply("it might take a while, I'll ping you when I'm done.")
     for attch in message.attachments:
-        print(attch)
         if 'text/plain' not in attch.content_type:
             await message.reply("Please send a plain text file")
             return
@@ -281,6 +280,44 @@ e.g: help help; help add; etc.
     await message.reply(msg)
 
 
+async def cmd_ocr(message, args):
+    """Performs OCR on the uploaded image
+
+Usage: ocr [-v]
+
+    -v: Optional argument passed for vertical OCR
+    """
+    if '-v' in args:
+        lang = ' -l jpn_vert+eng'
+    else:
+        lang = ' -l jpn+eng'
+    for attch in message.attachments:
+        if 'image' not in attch.content_type:
+            await message.reply("Please send an image text file")
+            return
+        temp_img_file = f"/tmp/{attch.filename}"
+        temp_ocr_file = f"/tmp/ocr-{attch.filename}"
+        with open(temp_img_file, "wb") as w:
+            r = requests.get(attch.url)
+            w.write(r.content)
+
+        process = subprocess.Popen(
+            f'tesseract {temp_img_file} {temp_ocr_file}' + lang,
+            shell=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE)
+        out, err = process.communicate()
+        with open(temp_ocr_file+".txt", "r") as r:
+            content = r.read()
+        if len(content.strip()) == 0:
+            await message.reply("Sorry I couldn't extract any text.")
+        elif len(content) < 100:
+            await message.reply(content)
+        else:
+            await utilities.reply_file(message, filename=temp_ocr_file+".txt",
+                                       content="Here you go.")
+
+
 async def cmd_ip(message, args):
     """Gives the IP address of the bot to ssh into it.
 Usage: ip
@@ -297,3 +334,5 @@ async def cmd_dark(message, args):
     ip = soup.find('body').text.split(" ")[-1]
     path = urlparse(args).path
     await message.reply(f"Visit: http://{ip}:5006{path}")
+
+
