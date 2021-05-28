@@ -300,12 +300,16 @@ Usage: ocr [-v] [args]
     -v  : Optional argument passed for vertical OCR
     args: Commandline arguments for tesseract. for more info look into `man tesseract`.
     """
+    remove_spaces = False
     if args.strip() == '-v':
         options = ' -l jpn_vert'
+        remove_spaces = True
     elif args.strip() == '':
         options = ' -l jpn'
-    elif re.match(r'[a-z+_ ]+' ,args):
+    elif re.match(r'[a-z+_ -]+' ,args):
         options = args
+        if 'jpn_vert' in args:
+            remove_spaces = True
     else:
         await message.reply("Invalid options.")
         return
@@ -334,14 +338,20 @@ Usage: ocr [-v] [args]
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE)
         out, err = process.communicate()
-        with open(temp_ocr_file+".txt", "r") as r:
+
+        temp_ocr_file += ".txt"
+        with open(temp_ocr_file, "r") as r:
             content = r.read()
+        if remove_spaces:
+            content.replace(" ", "")
         if len(content.strip()) == 0:
             await message.reply("Sorry I couldn't extract any text.")
         elif len(content) < 100:
             await message.reply(content)
         else:
-            await utilities.reply_file(message, filename=temp_ocr_file+".txt",
+            with open(temp_ocr_file, "w") as w:
+                w.write(content)
+            await utilities.reply_file(message, filename=temp_ocr_file,
                                        content="Here you go.")
 
 
