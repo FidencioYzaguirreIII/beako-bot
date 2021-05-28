@@ -1,4 +1,4 @@
-"""Commands for discord bot, each command will have a line passed to it
+"""Commands for discord bot in admin servers, each command will have a line passed to it
 the message it got."""
 
 import sys
@@ -88,36 +88,6 @@ def mark_completed(chapter, section=None, part=None):
     with open(config.status_file, 'w') as w:
         json.dump(status, w, indent=2)
     return msg
-
-
-def extract_range(range_str):
-    if range_str is None or range_str.strip() == '':
-        return 'Empty chapter or section'
-    ranges = range_str.split(',')
-    try:
-        for r in ranges:
-            if r.strip() == '':
-                continue
-            if '-' in r:
-                rng = r.split('-')
-                if len(rng) > 2:
-                    return 'Incorrect formatting, use valid range'
-                    raise SystemExit
-                yield from map(str, range(int(rng[0]), int(rng[1]) + 1))
-            else:
-                yield str(r)
-    except ValueError:
-        return 'Incorrect formatting: use integers for chapters and sections'
-
-
-def get_chapter_section(chap_sec_str):
-    m = re.match(r'c?([0-9-,]+)s?([0-9-,]+)?', chap_sec_str)
-    if not m:
-        return None, None
-    elif not m.group(2):
-        return extract_range(m.group(1)), None
-    else:
-        return extract_range(m.group(1)), extract_range(m.group(2))
 
 
 def get_work(work_str):
@@ -294,7 +264,7 @@ Arguments:
 e.g: help help; help add; etc.
 """
     if args.strip() == '':
-        msg = 'This bot can be used to manage the assignments of the works.\n'
+        msg = 'This bot can be used to manage/view the assignments of the works. and many other functions.\n'
         msg += 'Available commands:\n'
         commands = filter(lambda x: inspect.isfunction(x[1]) and
                           x[0].startswith('cmd_'),

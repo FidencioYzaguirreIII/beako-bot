@@ -1,4 +1,4 @@
-"""Commands for discord bot, each command will have a line passed to it
+"""Commands for discord bot in public servers, each command will have a line passed to it
 the message it got."""
 
 import sys
@@ -23,6 +23,36 @@ if not os.path.isfile(config.status_file):
     with open(config.status_file, 'w') as w:
         w.write('{}')
 
+
+def extract_range(range_str):
+    if range_str is None or range_str.strip() == '':
+        return 'Empty chapter or section'
+    ranges = range_str.split(',')
+    try:
+        for r in ranges:
+            if r.strip() == '':
+                continue
+            if '-' in r:
+                rng = r.split('-')
+                if len(rng) > 2:
+                    return 'Incorrect formatting, use valid range'
+                    raise SystemExit
+                yield from map(str, range(int(rng[0]), int(rng[1]) + 1))
+            else:
+                yield str(r)
+    except ValueError:
+        return 'Incorrect formatting: use integers for chapters and sections'
+
+
+def get_chapter_section(chap_sec_str):
+    m = re.match(r'c?([0-9-,]+)s?([0-9-,]+)?', chap_sec_str)
+    if not m:
+        return None, None
+    elif not m.group(2):
+        return extract_range(m.group(1)), None
+    else:
+        return extract_range(m.group(1)), extract_range(m.group(2))
+        
 
 def get_status(chapter=None):
     with open(config.status_file, 'r') as r:
