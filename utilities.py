@@ -6,15 +6,17 @@ import config
 
 
 def is_admin(message):
+    is_admin = False
     if message.channel.guild.id in config.admin_guilds:
-        return True
+        is_admin = True
     # thevoidzero's userID
     if message.author.id == 711870190597701642:
         # if I want to test as non admin user then `B!` will work.
         if message.content[0] == 'B':
-            return False
-        return True
-    return False
+            is_admin = False
+        else:
+            is_admin = True
+    return is_admin
 
 
 def parse_novel(title, chapter):

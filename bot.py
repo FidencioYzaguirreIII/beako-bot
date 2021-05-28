@@ -8,6 +8,8 @@ import admin_commands
 import config
 import time
 import scrapper
+import utilities
+
 
 if __name__ == "__main__":
     # delay just in case internet isn't connected at startup.
