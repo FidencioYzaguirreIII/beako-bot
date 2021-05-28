@@ -283,14 +283,26 @@ e.g: help help; help add; etc.
 async def cmd_ocr(message, args):
     """Performs OCR on the uploaded image
 
-Usage: ocr [-v]
+Usage: ocr [-v] [args]
 
-    -v: Optional argument passed for vertical OCR
+    -v  : Optional argument passed for vertical OCR
+    args: Commandline arguments for tesseract. for more info look into `man tesseract`.
     """
-    if '-v' in args:
-        lang = ' -l jpn_vert+eng'
+    if args.strip() == '-v':
+        options = ' -l jpn_vert'
+    elif args.strip() == '':
+        options = ' -l jpn'
     else:
-        lang = ' -l jpn+eng'
+        options = args
+    if len(message.attachments) == 0:
+        process = subprocess.Popen(
+            f'tesseract ' + options,
+            shell=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE)
+        out, err = process.communicate()
+        await message.reply(out.decode())
+        return
     for attch in message.attachments:
         if 'image' not in attch.content_type:
             await message.reply("Please send an image text file")
@@ -302,7 +314,7 @@ Usage: ocr [-v]
             w.write(r.content)
 
         process = subprocess.Popen(
-            f'tesseract {temp_img_file} {temp_ocr_file}' + lang,
+            f'tesseract {temp_img_file} {temp_ocr_file}' + options,
             shell=True,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE)
