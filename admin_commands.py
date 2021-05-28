@@ -207,7 +207,7 @@ Usage: deepl <attachment>
 
     <attachment>: A plain text file in utf-8 encoding.
 """
-    await message.reply("it might take a while, I'll ping you when I'm done.")
+    send_msg = message.reply("it might take a while, I'll ping you when I'm done.")
     for attch in message.attachments:
         if 'text/plain' not in attch.content_type:
             await message.reply("Please send a plain text file")
@@ -218,9 +218,18 @@ Usage: deepl <attachment>
             r = requests.get(attch.url)
             r.encoding = 'utf-8'
             w.write(r.text)
+
+        # Implement it once it's sure every process will close firefox after done.
+        
+        # while not deepl.web:
+        #     # waits if another deepl translation is going on
+        #     await asyncio.sleep(10)
+
         await deepl.init_web()
         await deepl.translate(temp_og_file, temp_tl_file)
         await deepl.close_web()
+        
+        await send_msg
         await utilities.reply_file(message, temp_tl_file, "Here you go")
 
 
@@ -280,6 +289,9 @@ e.g: help help; help add; etc.
     await message.reply(msg)
 
 
+# I'm adding userinput as a CLI directly in this command, so never
+# ever give permission to use this command to other people as they can
+# crash your server or do worse. :tehe:
 async def cmd_ocr(message, args):
     """Performs OCR on the uploaded image
 
@@ -292,8 +304,11 @@ Usage: ocr [-v] [args]
         options = ' -l jpn_vert'
     elif args.strip() == '':
         options = ' -l jpn'
-    else:
+    elif re.match(r'[a-z+_ ]+' ,args):
         options = args
+    else:
+        await message.reply("Invalid options.")
+        return
     if len(message.attachments) == 0:
         process = subprocess.Popen(
             f'tesseract ' + options,
