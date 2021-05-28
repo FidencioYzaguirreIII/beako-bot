@@ -5,6 +5,18 @@ import deepl
 import config
 
 
+def is_admin(message):
+    if message.channel.guild.id in config.admin_guilds:
+        return True
+    # thevoidzero's userID
+    if message.author.id == 711870190597701642:
+        # if I want to test as non admin user then `B!` will work.
+        if message.content[0] == 'B':
+            return False
+        return True
+    return False
+
+
 def parse_novel(title, chapter):
     title = config.novels.get(title, title)
     return title, chapter
@@ -60,3 +72,7 @@ async def mtl_ncode(novel, chapter, message, outfile=None):
             await deepl.init_web()
         await deepl.translate(rawfile, outfile)
     await reply_file(message, outfile, "Here you go.")
+
+
+
+    

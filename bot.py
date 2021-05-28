@@ -44,7 +44,7 @@ async def on_message(message):
             return
 
     # Finding the appropriate function to call
-    if message.channel.guild.id in config.admin_guilds:
+    if utilities.is_admin(message):
         try:
             cmd_func = getattr(admin_commands, f'cmd_{cmd.lower()}')
         except AttributeError:
