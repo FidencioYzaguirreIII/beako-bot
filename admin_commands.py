@@ -231,6 +231,9 @@ Usage: deepl <attachment>
         
         await send_msg
         await utilities.reply_file(message, temp_tl_file, "Here you go")
+        # remove the followings during debug
+        os.remove(temp_og_file)
+        os.remove(temp_tl_file)
 
 
 async def cmd_check(message, args):
@@ -332,12 +335,14 @@ Usage: ocr [-v] [args]
             r = requests.get(attch.url)
             w.write(r.content)
 
+        print(f'tesseract {temp_img_file} {temp_ocr_file} ' + options)
         process = subprocess.Popen(
-            f'tesseract {temp_img_file} {temp_ocr_file}' + options,
+            f'tesseract {temp_img_file} {temp_ocr_file} ' + options,
             shell=True,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE)
         out, err = process.communicate()
+        os.remove(temp_img_file)
 
         temp_ocr_file += ".txt"
         with open(temp_ocr_file, "r") as r:
@@ -353,6 +358,7 @@ Usage: ocr [-v] [args]
                 w.write(content)
             await utilities.reply_file(message, filename=temp_ocr_file,
                                        content="Here you go.")
+        os.remove(temp_ocr_file)
 
 
 async def cmd_ip(message, args):
