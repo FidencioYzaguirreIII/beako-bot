@@ -343,7 +343,7 @@ Usage: ocr [-v] [args]
         with open(temp_ocr_file, "r") as r:
             content = r.read()
         if remove_spaces:
-            content.replace(" ", "")
+            content = content.replace(" ", "")
         if len(content.strip()) == 0:
             await message.reply("Sorry I couldn't extract any text.")
         elif len(content) < 100:

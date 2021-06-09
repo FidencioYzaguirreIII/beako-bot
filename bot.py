@@ -36,10 +36,16 @@ async def on_message(message):
     cmd = m.group(1)
     args = m.group(2)
     print(f'Command: {cmd} Args: {args}')
+
+    if args.strip() == 'help':
+        # If `command help` is used convert it to `help command`
+        cmd, args = 'help', cmd
+    
     with open(config.log_file, 'a') as lf:
         lf.write(f'{cmd}: {args}\n')
+
     if '-m' in sys.argv:
-        # meaning manually reply.
+        # Get the reply from terminal if run on the manual mode
         rep = input("Enter reply<default>: ")
         if rep.strip():
             await message.reply(rep)

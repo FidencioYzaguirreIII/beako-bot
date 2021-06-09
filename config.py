@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 
 
 root_path = os.path.dirname(__file__)
+load_dotenv(os.path.join(root_path, ".env"))
 
 ncode_pattern = re.compile(r'(https?://)?(ncode.syosetu.com/?)?([a-z0-9]+)/([0-9]+)/?')
 bot_pattern = re.compile(r"b! +([a-zA-Z0-9-]+) ?(.*)")
@@ -16,9 +17,9 @@ temp_file = os.path.join(root_path, '.temp_file')
 status_file = os.path.join(root_path, 'tables/status.json')
 
 
-#inform_guilds = [802505736218214420]  # my test server
-inform_guilds = [772947291606614026]  # Heretics
-admin_guilds = [772947291606614026]  # Heretics
+#inform_guilds = [int(os.getenv('TEST_GUILD_ID'))]  # my test server
+inform_guilds = [int(os.getenv('HERETIC_GUILD_ID'))]  # Heretics
+admin_guilds = [int(os.getenv('HERETIC_GUILD_ID'))]  # Heretics
 
 
 novels = {'rezero': 'n2267be'}
@@ -28,5 +29,4 @@ if not os.path.isdir(os.path.join(root_path, 'data')):
 if not os.path.isdir(os.path.join(root_path, 'tables')):
     os.mkdir(os.path.join(root_path, 'tables'))
 
-load_dotenv(os.path.join(root_path, ".env"))
 token = os.getenv('DISCORD_TOKEN')

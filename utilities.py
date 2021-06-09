@@ -10,7 +10,7 @@ def is_admin(message):
     if message.channel.guild.id in config.admin_guilds:
         is_admin = True
     # thevoidzero's userID
-    if message.author.id == 711870190597701642:
+    if message.author.id == int(os.getenv('VOIDZERO_ID')):
         # if I want to test as non admin user then `B!` will work.
         if message.content[0] == 'B':
             is_admin = False
