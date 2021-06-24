@@ -11,6 +11,7 @@ from string import Template
 import urllib.request
 from urllib.parse import urlparse
 import subprocess
+from shutil import copyfile
 
 import config
 import requests

@@ -8,6 +8,7 @@ import selenium
 from selenium import webdriver
 from dotenv import load_dotenv
 import config
+import replacements
 
 MAX_DELAY_SEC = 120
 MIN_DELAY_SEC = 5
@@ -80,7 +81,7 @@ async def process_text(text):
     for i in range(MAX_DELAY_SEC - MIN_DELAY_SEC):
         await asyncio.sleep(1)
         translated = outputarea.get_attribute('innerHTML')
-        if translated.count('[...]') > 5:
+        if translated.count('[...]') > 1:
             continue
         if translated and outputarea.is_enabled() and inputarea.is_enabled():
             break
@@ -95,11 +96,7 @@ def replace_words(text):
             rep = json.load(r)
 
     text = re.sub(r'\n\n+', '\n\n', text)
-    for k, v in rep.items():
-        n = text.count(k)
-        if n > 0:
-            print(f'REPLACE: {k}-->{v} ({n})')
-            text = text.replace(k, v)
+    text = replacements.replace(text, rep)
     return text
 
 

@@ -186,7 +186,7 @@ async def cmd_mtl(message, args):
     """Downloads the chapter and uploads a mtl from ncode website.
 Usage: mtl <ncode-link>
     """
-    link = ncode_pattern.match(args)
+    link = config.ncode_pattern.match(args)
     if not link:
         ch = config.chapter_pattern.match(args)
         if not ch:
@@ -245,7 +245,7 @@ No arguments.
     """
     with open(config.temp_file, 'r') as r:
         url = r.read().strip()
-    m = ncode_pattern.match(url)
+    m = config.ncode_pattern.match(url)
     novel = m.group(3)
     chapter = int(m.group(4)) + 1
     try:
