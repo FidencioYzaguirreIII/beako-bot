@@ -18,8 +18,10 @@ status_file = os.path.join(root_path, 'tables/status.json')
 
 
 #inform_guilds = [int(os.getenv('TEST_GUILD_ID'))]  # my test server
-inform_guilds = [int(os.getenv('HERETIC_GUILD_ID'))]  # Heretics
+inform_guilds = [int(os.getenv('HERETIC_GUILD_ID')),
+                 int(os.getenv('HERETIC_PUBLIC_GUILD_ID'))]  # Heretics
 admin_guilds = [int(os.getenv('HERETIC_GUILD_ID'))]  # Heretics
+privileged_guilds = [int(os.getenv('HERETIC_PUBLIC_GUILD_ID'))]  # Heretics public
 
 
 novels = {'rezero': 'n2267be'}

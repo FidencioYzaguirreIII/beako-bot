@@ -19,6 +19,11 @@ def is_admin(message):
     return is_admin
 
 
+def is_privileged(message):
+    is_privileged = is_admin(message)
+    return is_privileged or message.channel.guild.id in config.privileged_guilds
+
+
 def parse_novel(title, chapter):
     title = config.novels.get(title, title)
     return title, chapter

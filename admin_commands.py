@@ -20,7 +20,7 @@ import deepl
 
 # adding all the commands to this as well
 from commands import *
-
+from privilege_commands import *
 
 def new_chapter(chapter, sections):
     with open(config.status_file, 'r') as r:
@@ -207,7 +207,7 @@ Usage: deepl <attachment>
 
     <attachment>: A plain text file in utf-8 encoding.
 """
-    send_msg = message.reply("it might take a while, I'll ping you when I'm done.")
+    await message.reply("it might take a while, I'll ping you when I'm done.")
     for attch in message.attachments:
         if 'text/plain' not in attch.content_type:
             await message.reply("Please send a plain text file")
@@ -228,8 +228,7 @@ Usage: deepl <attachment>
         await deepl.init_web()
         await deepl.translate(temp_og_file, temp_tl_file)
         await deepl.close_web()
-        
-        await send_msg
+
         await utilities.reply_file(message, temp_tl_file, "Here you go")
         # remove the followings during debug
         os.remove(temp_og_file)
@@ -290,75 +289,6 @@ e.g: help help; help add; etc.
         except AttributeError:
             msg = 'Requested command is not available'
     await message.reply(msg)
-
-
-# I'm adding userinput as a CLI directly in this command, so never
-# ever give permission to use this command to other people as they can
-# crash your server or do worse. :tehe:
-async def cmd_ocr(message, args):
-    """Performs OCR on the uploaded image
-
-Usage: ocr [-v] [args]
-
-    -v  : Optional argument passed for vertical OCR
-    args: Commandline arguments for tesseract. for more info look into `man tesseract`.
-    """
-    remove_spaces = False
-    if args.strip() == '-v':
-        options = ' -l jpn_vert'
-        remove_spaces = True
-    elif args.strip() == '':
-        options = ' -l jpn'
-    elif re.match(r'[a-z+_ -]+' ,args):
-        options = args
-        if 'jpn_vert' in args:
-            remove_spaces = True
-    else:
-        await message.reply("Invalid options.")
-        return
-    if len(message.attachments) == 0:
-        process = subprocess.Popen(
-            f'tesseract ' + options,
-            shell=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE)
-        out, err = process.communicate()
-        await message.reply(out.decode())
-        return
-    for attch in message.attachments:
-        if 'image' not in attch.content_type:
-            await message.reply("Please send an image text file")
-            return
-        temp_img_file = f"/tmp/{attch.filename}"
-        temp_ocr_file = f"/tmp/ocr-{attch.filename}"
-        with open(temp_img_file, "wb") as w:
-            r = requests.get(attch.url)
-            w.write(r.content)
-
-        print(f'tesseract {temp_img_file} {temp_ocr_file} ' + options)
-        process = subprocess.Popen(
-            f'tesseract {temp_img_file} {temp_ocr_file} ' + options,
-            shell=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE)
-        out, err = process.communicate()
-        os.remove(temp_img_file)
-
-        temp_ocr_file += ".txt"
-        with open(temp_ocr_file, "r") as r:
-            content = r.read()
-        if remove_spaces:
-            content = content.replace(" ", "")
-        if len(content.strip()) == 0:
-            await message.reply("Sorry I couldn't extract any text.")
-        elif len(content) < 100:
-            await message.reply(content)
-        else:
-            with open(temp_ocr_file, "w") as w:
-                w.write(content)
-            await utilities.reply_file(message, filename=temp_ocr_file,
-                                       content="Here you go.")
-        os.remove(temp_ocr_file)
 
 
 async def cmd_ip(message, args):

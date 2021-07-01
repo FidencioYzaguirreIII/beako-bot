@@ -5,6 +5,7 @@ import asyncio
 import discord
 import commands
 import admin_commands
+import privilege_commands
 import config
 import time
 import scrapper
@@ -57,6 +58,11 @@ async def on_message(message):
             cmd_func = getattr(admin_commands, f'cmd_{cmd.lower()}')
         except AttributeError:
             cmd_func = admin_commands.cmd_message
+    elif utilities.is_privileged(message):
+        try:
+            cmd_func = getattr(privilege_commands, f'cmd_{cmd.lower()}')
+        except AttributeError:
+            cmd_func = privilege_commands.cmd_message
     else:
         try:
             cmd_func = getattr(commands, f'cmd_{cmd.lower()}')
