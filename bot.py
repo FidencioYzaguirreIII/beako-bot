@@ -36,7 +36,7 @@ async def on_message(message):
         return
     cmd = m.group(1)
     args = m.group(2)
-    print(f'Command: {cmd} Args: {args}')
+    print(f'User: {message.author} Command: {cmd} Args: {args}')
 
     if args.strip() == 'help':
         # If `command help` is used convert it to `help command`

@@ -57,6 +57,7 @@ Usage: ocr [--ops] [args]
 
 possible options (--ops):
     --hz     : Optional argument passed for horizontal OCR
+    --vt     : Optional argument passed for vertical OCR
     --line   : expands to option `--psm 7` -> treat the image as a line
     --char   : expands to option `--psm 10` -> treat the image as a char
     --word   : expands to option `--psm 8` -> treat the image as a word
@@ -66,17 +67,16 @@ possible options (--ops):
     args: Commandline arguments for tesseract. for more info look into `man tesseract`.
     """
     remove_spaces = False
-    if args.strip() == '--hz':
-        options = ' -l jpn'
-        remove_spaces = True
-    elif args.strip() == '':
-        options = ' -l jpn_vert'
+    if args.strip() == '':
+        options = '-l jpn_vert'
     elif re.match(r'[a-z+_ -]+' ,args):
         options = args
-        if 'jpn_vert' in args:
-            remove_spaces = True
+        options = options.replace('--hz', '-l jpn')
+        options = options.replace('--vt', '-l jpn_vert')
         if '-l ' not in options:
             options = f'-l jpn_vert {options}'
+        if 'jpn_vert' in args:
+            remove_spaces = True
         options = options.replace('--line', '--psm 7')
         options = options.replace('--char', '--psm 10')
         options = options.replace('--word', '--psm 8')
