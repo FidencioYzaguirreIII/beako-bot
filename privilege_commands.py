@@ -51,11 +51,18 @@ e.g: help help; help add; etc.
 # ever give permission to use this command to other people as they can
 # crash your server or do worse. :tehe:
 async def cmd_ocr(message, args):
-    """Performs OCR on the uploaded image
+    """Performs OCR on the uploaded image, by default assumes Japanese texts in vertical layout.
 
-Usage: ocr [-v] [args]
+Usage: ocr [--ops] [args]
 
-    -v  : Optional argument passed for vertical OCR
+possible options (--ops):
+    --hz     : Optional argument passed for horizontal OCR
+    --line   : expands to option `--psm 7` -> treat the image as a line
+    --char   : expands to option `--psm 10` -> treat the image as a char
+    --word   : expands to option `--psm 8` -> treat the image as a word
+    --sparse : expands to option `--psm 11` -> treat the image as sparse
+    --raw    : expands to option `--psm 13` -> treat the image as raw
+
     args: Commandline arguments for tesseract. for more info look into `man tesseract`.
     """
     remove_spaces = False
