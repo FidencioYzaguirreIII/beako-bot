@@ -71,24 +71,16 @@ Usage: ocr [-v] [args]
     else:
         await message.reply("Invalid options.")
         return
-    if len(message.attachments) == 0:
-        process = subprocess.Popen(
-            f'tesseract ' + options,
-            shell=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE)
-        out, err = process.communicate()
-        await message.reply(out.decode())
-        return
-    for attch in message.attachments:
-        if 'image' not in attch.content_type:
-            await message.reply("Please send an image text file")
-            return
-        temp_img_file = f"/tmp/{attch.filename}"
-        temp_ocr_file = f"/tmp/ocr-{attch.filename}"
-        with open(temp_img_file, "wb") as w:
-            r = requests.get(attch.url)
-            w.write(r.content)
+    img_len = 0
+    for attch in utilities.get_images(message):
+        img_len += 1
+        if not attch:
+            await message.reply("Non-Image attachment detected. Please send an image file," +
+                                " or reference an message with an image.")
+            continue
+        
+        temp_img_file = f"/tmp/{attch}"
+        temp_ocr_file = f"/tmp/ocr-{attch}"
 
         print(f'tesseract {temp_img_file} {temp_ocr_file} ' + options)
         process = subprocess.Popen(
@@ -106,7 +98,7 @@ Usage: ocr [-v] [args]
             content = content.replace(" ", "")
         if len(content.strip()) == 0:
             await message.reply("Sorry I couldn't extract any text.")
-        elif len(content) < 100:
+        elif len(content) < 200:
             await message.reply(content)
         else:
             with open(temp_ocr_file, "w") as w:
@@ -114,5 +106,14 @@ Usage: ocr [-v] [args]
             await utilities.reply_file(message, filename=temp_ocr_file,
                                        content="Here you go.")
         os.remove(temp_ocr_file)
+    if img_len == 0:
+        process = subprocess.Popen(
+            f'tesseract ' + options,
+            shell=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE)
+        out, err = process.communicate()
+        await message.reply(out.decode())
+        return
 
 

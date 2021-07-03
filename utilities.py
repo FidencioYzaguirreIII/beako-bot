@@ -1,4 +1,5 @@
 import os
+import requests
 import discord
 import scrapper
 import deepl
@@ -82,4 +83,24 @@ async def mtl_ncode(novel, chapter, message, outfile=None):
 
 
 
+def get_images(message):
+    if not message:
+        return
+    for attch in message.attachments:
+        if 'image' not in attch.content_type:
+            yield None
+        i = 0
+        temp_img_file = f"{attch.filename}"
+        while True:
+            if not os.path.exists(f"/tmp/{temp_img_file}"):
+                break
+            temp_img_file = f"{i}_{attch.filename}"
+            i += 1
+        with open(f"/tmp/{temp_img_file}", "wb") as w:
+            r = requests.get(attch.url)
+            w.write(r.content)
+        yield temp_img_file
+    if message.reference:
+        yield from get_images(message.reference.resolved)
+    
     
