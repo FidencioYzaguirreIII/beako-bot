@@ -59,15 +59,22 @@ Usage: ocr [-v] [args]
     args: Commandline arguments for tesseract. for more info look into `man tesseract`.
     """
     remove_spaces = False
-    if args.strip() == '-v':
-        options = ' -l jpn_vert'
+    if args.strip() == '--hz':
+        options = ' -l jpn'
         remove_spaces = True
     elif args.strip() == '':
-        options = ' -l jpn'
+        options = ' -l jpn_vert'
     elif re.match(r'[a-z+_ -]+' ,args):
         options = args
         if 'jpn_vert' in args:
             remove_spaces = True
+        if '-l ' not in options:
+            options = f'-l jpn_vert {options}'
+        options = options.replace('--line', '--psm 7')
+        options = options.replace('--char', '--psm 10')
+        options = options.replace('--word', '--psm 8')
+        options = options.replace('--sparse', '--psm 11')
+        options = options.replace('--raw', '--psm 13')
     else:
         await message.reply("Invalid options.")
         return
