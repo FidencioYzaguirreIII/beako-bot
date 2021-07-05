@@ -81,6 +81,20 @@ async def on_message(message):
         # lf.write(str(e.__traceback__)+'\n')
 
 
+@client.event
+async def on_reaction_add(reaction, user):
+    print(f'Reaction:{reaction.emoji} User:{user}')
+    if reaction.emoji == '❌':
+        if utilities.is_admin(reaction.message):
+            await reaction.message.delete()
+            return
+        if reaction.message.reference:
+            parent = reaction.message.reference.resolved
+            if parent:
+                if parent.author == user:
+                    await reaction.message.delete()
+
+
 def get_new_chapter_no():
     with open(config.temp_file, 'r') as r:
         url = r.read().strip()

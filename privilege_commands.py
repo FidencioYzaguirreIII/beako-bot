@@ -74,7 +74,10 @@ possible options (--ops):
         options = options.replace('--hz', '-l jpn')
         options = options.replace('--vt', '-l jpn_vert')
         if '-l ' not in options:
-            options = f'-l jpn_vert {options}'
+            if '--char' in options:
+                options = f'-l jpn {options}'
+            else:
+                options = f'-l jpn_vert {options}'
         if 'jpn_vert' in args:
             remove_spaces = True
         options = options.replace('--line', '--psm 7')
