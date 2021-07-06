@@ -76,11 +76,8 @@ async def mtl_ncode(novel, chapter, message, outfile=None):
                                f'data/{novel}_{chapter}-en.txt')
     if not os.path.isfile(outfile):
         await message.reply("The translation might take a while, I'll upload when it's finished.")
-        if deepl.web is None:
-            await deepl.init_web()
-        await deepl.translate(rawfile, outfile)
+        await deepl.translate(rawfile, outfile, novel=novel)
     await reply_file(message, outfile, "Here you go.")
-
 
 
 def get_images(message):

@@ -101,7 +101,8 @@ def replace(input_text, replacements):
          Names.LAST_NAME, Names.LAST_NAME),
         ('Remaining Names', 'full-names', True,
          Names.ALL_NAMES, Names.FULL_NAME),
-        ('Name like', 'name-like', True, Names.LAST_NAME, Names.NONE)
+        ('Name like', 'name-like', True, Names.LAST_NAME, Names.NONE),
+        ('Final', 'final', False)
     ]
 
     for rule in rules:
@@ -124,7 +125,7 @@ def replace(input_text, replacements):
         print(f'  SubTotal: {total_replacements-prev_count}')
     return text
 
-        
+
 def main(input_file, rep_file):
     global total_replacements
     with open(input_file,'r') as r:

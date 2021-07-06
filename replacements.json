@@ -1,11 +1,11 @@
 {
     "specials":{
-	"血命の儀": "Lifeblood Ritual",
-	"『暴食』": "Gluttony",
-	"『魔女』": "Witch",
 	"姉上":"Ane-ue",
-	"兄上":"Ani-ue",
-	"旦那くん":"Husband-kun"
+	"兄上":"Ani-ue"
+    },
+    "final":{
+	"先輩":"senpai",
+	"先生":"sensei"
     },
     "basic": {
 	"　": " ",
@@ -17,38 +17,8 @@
 	"△▼△▼△▼△": "*******"
     },
     "names":{
-	"Natsumi Schwartz": ["ナツミ", "シュバルツ"],
-	"Natsuki Subaru":	["ナツキ", "スバル"],
-	"Zykl Osman":["ズィクル", "オスマン"],
-	"Vincent Vollachia":["ヴィンセント", "ヴォラキア"],
-	"Medium O'Connell":["ミディアム", "オコーネル"]
     },
     "single-names":{
-	"Abel":"アベル",
-	"Emilia":	"エミリア",
-	"Puck":	"パック",
-	"Rem":	"レム",
-	"Barusu":	"バルス",
-	"Anatasia":	"アナスタシア",
-	"Echidna":	"エキドナ",
-	"Meilie":	"メィリィ",
-	"Louis":	"ルイ",
-	"Beako":	"ベア子",
-	"Roswaal":	"ロズワール",
-	"Julius":	"ユリウス",
-	"Shaula":	"シャウラ",
-	"Clind":	"クリンド",
-	"Garfield":	"ガーフィール",
-	"Garf":	"ガーフ",
-	"Ryuzu":	"リューズ",
-	"Otto":	"オットー",
-	"Petra":	"ペトラ",
-	"Mizelda":	"ミゼルダ",
-	"Talitha":	"タリッタ",
-	"Flop":"フロップ",
-	"Flora":"フローラ",
-	"Medium":"ミディアム",
-	"Soldier":	"兵卒"
     },
     "full-names": {},
     "name-like":{
