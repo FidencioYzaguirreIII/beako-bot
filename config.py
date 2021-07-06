@@ -15,7 +15,7 @@ chapter_pattern = re.compile(r'([a-z0-9]+) ?([0-9]+)')
 log_file = os.path.join(root_path, '.bot.log')
 temp_file = os.path.join(root_path, '.temp_file')
 status_file = os.path.join(root_path, 'tables/status.json')
-
+kanji_exe = os.path.join(root_path, 'kanji')
 
 #inform_guilds = [int(os.getenv('TEST_GUILD_ID'))]  # my test server
 inform_guilds = [int(os.getenv('HERETIC_GUILD_ID')),

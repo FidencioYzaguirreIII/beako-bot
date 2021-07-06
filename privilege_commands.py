@@ -134,3 +134,35 @@ possible options (--ops):
         return
 
 
+async def cmd_kanji(message, args):
+    """Performs OCR on the uploaded image to find possible Japanese characters.
+
+Usage: kanji
+
+    attachment: image file/files. or reference a message with image.
+    """
+    img_len = 0
+    for attch in utilities.get_images(message):
+        img_len += 1
+        if not attch:
+            await message.reply("Non-Image attachment detected. Please send an image file," +
+                                " or reference an message with an image.")
+            continue
+
+        temp_img_file = f"/tmp/{attch}"
+        kanji_exe = config.kanji_exe
+
+        print(f'{kanji_exe} {temp_img_file}')
+        process = subprocess.Popen(
+            f'{kanji_exe} {temp_img_file}',
+            shell=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE)
+        out, err = process.communicate()
+        os.remove(temp_img_file)
+        await message.reply(out)
+
+    if img_len == 0:
+        await message.reply("Please attach an image with the command.")
+
+
