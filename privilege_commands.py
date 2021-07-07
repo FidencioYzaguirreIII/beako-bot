@@ -66,7 +66,6 @@ possible options (--ops):
 
     args: Commandline arguments for tesseract. for more info look into `man tesseract`.
     """
-    remove_spaces = False
     if args.strip() == '':
         options = '-l jpn_vert'
     elif re.match(r'[a-z+_ -]+' ,args):
@@ -78,8 +77,6 @@ possible options (--ops):
                 options = f'-l jpn {options}'
             else:
                 options = f'-l jpn_vert {options}'
-        if 'jpn_vert' in args:
-            remove_spaces = True
         options = options.replace('--line', '--psm 7')
         options = options.replace('--char', '--psm 10')
         options = options.replace('--word', '--psm 8')
@@ -99,9 +96,9 @@ possible options (--ops):
         temp_img_file = f"/tmp/{attch}"
         temp_ocr_file = f"/tmp/ocr-{attch}"
 
-        print(f'tesseract {temp_img_file} {temp_ocr_file} ' + options)
+        print(f'tesseract -c preserve_interword_spaces=1 {options} {temp_img_file} {temp_ocr_file} ')
         process = subprocess.Popen(
-            f'tesseract {temp_img_file} {temp_ocr_file} ' + options,
+            f'tesseract -c preserve_interword_spaces=1 {options} {temp_img_file} {temp_ocr_file} ',
             shell=True,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE)
@@ -111,8 +108,6 @@ possible options (--ops):
         temp_ocr_file += ".txt"
         with open(temp_ocr_file, "r") as r:
             content = r.read()
-        if remove_spaces:
-            content = content.replace(" ", "")
         if len(content.strip()) == 0:
             await message.reply("Sorry I couldn't extract any text.")
         elif len(content) < 200:
@@ -160,7 +155,10 @@ Usage: kanji
             stderr=subprocess.PIPE)
         out, err = process.communicate()
         os.remove(temp_img_file)
-        await message.reply(out)
+        if out:
+            await message.reply(out.decode())
+        else:
+            await message.reply("Sorry I couldn't recognize it.")
 
     if img_len == 0:
         await message.reply("Please attach an image with the command.")

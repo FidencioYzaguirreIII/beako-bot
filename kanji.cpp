@@ -12,6 +12,7 @@ int main(int argc, char *argv[]){
   Pix *image = pixRead(argv[1]);
   api->SetImage(image);
   api->SetVariable("save_blob_choices", "T");
+  api->SetVariable("tessedit_char_blacklist", "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
   api->SetPageSegMode(tesseract::PSM_SINGLE_CHAR);
   api->Recognize(NULL);
 
