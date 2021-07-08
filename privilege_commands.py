@@ -120,7 +120,7 @@ possible options (--ops):
         os.remove(temp_ocr_file)
     if img_len == 0:
         process = subprocess.Popen(
-            f'tesseract ' + options,
+            'tesseract ' + options,
             shell=True,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE)

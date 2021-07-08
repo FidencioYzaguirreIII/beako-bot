@@ -1,5 +1,7 @@
 import os
+import subprocess
 import requests
+
 import discord
 import scrapper
 import deepl
@@ -96,9 +98,12 @@ def get_images(message):
                 break
             temp_img_file = f"{i}_{attch.filename}"
             i += 1
-        with open(f"/tmp/{temp_img_file}", "wb") as w:
+        with open(f"/tmp/tm-{temp_img_file}", "wb") as w:
             r = requests.get(attch.url)
             w.write(r.content)
+        subprocess.Popen(f'convert /tmp/tm-{temp_img_file} -bordercolor White -border 10x10 /tmp/{temp_img_file}',
+                         shell=True).wait()
+        os.remove(f'/tmp/tm-{temp_img_file}')
         yield temp_img_file
     if message.reference:
         yield from get_images(message.reference.resolved)
