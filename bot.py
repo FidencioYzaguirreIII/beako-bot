@@ -123,8 +123,7 @@ async def send_chapter_alert(chap_num, chap_url):
     for g in servers:
         channel = filter(lambda c: c.name in ['general'], g.channels)
         for c in channel:
-            # this @role doesn't work copy the <@12121> format text for mentions.
-            await c.send("@newChapterAlert chapter-" +
+            await c.send("<@&846779183303491625> chapter-" +
                          f"{chap_num} has been released. ")
             code = "/".join(chap_url.split("/")[-3:-1])
             await c.send(f"use command `b! mtl {code}` to get the MTL.")

@@ -255,9 +255,11 @@ No arguments.
         await message.reply("Sorry there are no new chapters in the website.")
         return
     
-    await message.reply("The new chapter is out, you can check it in the" +
-                        f" link:\n{next_chap}\n use `mtl {novel}/{chapter}`" +
-                        " command if you want mtl for the new chapter")
+    await message.reply(
+        "<@&846779183303491625> The new chapter is out" +
+        ", you can check it in the" +
+        f" link:\n{next_chap}\n use `b! mtl {novel}/{chapter}`" +
+        " command if you want mtl for the new chapter")
     with open(config.temp_file, 'w') as w:
         w.write(next_chap)
 
