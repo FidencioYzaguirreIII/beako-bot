@@ -137,7 +137,8 @@ async def check_new_chapter():
             chap, url = get_new_chapter_no()
             if chap:
                 await send_chapter_alert(chap, url)
-            await asyncio.sleep(120)  # checks every 2 minutes
+            else:
+                await asyncio.sleep(120)  # checks every 2 minutes
         except KeyboardInterrupt:
             break
 
