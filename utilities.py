@@ -12,7 +12,7 @@ def is_admin(message):
     is_admin = False
     if message.channel.guild.id in config.admin_guilds:
         is_admin = True
-    # thevoidzero's userID
+    # thevoidzero's userID since I may have to test things here and there.
     if message.author.id == int(os.getenv('VOIDZERO_ID')):
         # if I want to test as non admin user then `B!` will work.
         if message.content[0] == 'B':
@@ -24,7 +24,8 @@ def is_admin(message):
 
 def is_privileged(message):
     is_privileged = is_admin(message)
-    return is_privileged or message.channel.guild.id in config.privileged_guilds
+    return (is_privileged or
+            message.channel.guild.id in config.privileged_guilds)
 
 
 def parse_novel(title, chapter):
