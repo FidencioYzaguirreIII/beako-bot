@@ -21,7 +21,12 @@ kanji_exe = os.path.join(root_path, 'kanji')
 inform_guilds = [int(os.getenv('HERETIC_GUILD_ID')),
                  int(os.getenv('HERETIC_PUBLIC_GUILD_ID'))]  # Heretics
 admin_guilds = [int(os.getenv('HERETIC_GUILD_ID'))]  # Heretics
-privileged_guilds = [int(os.getenv('HERETIC_PUBLIC_GUILD_ID'))]  # Heretics public
+privileged_guilds = [int(os.getenv('HERETIC_PUBLIC_GUILD_ID'))]
+
+admin_roles = {'heretical mods'}
+privileged_roles = {}
+mtl_roles = {'heretical translators', 'mtl_permit'}
+ocr_roles = {'heretical transcribers', 'ocr_permit'}
 
 
 novels = {'rezero': 'n2267be'}

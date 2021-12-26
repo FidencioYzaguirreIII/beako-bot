@@ -2,16 +2,46 @@ import os
 import subprocess
 import requests
 
+from functools import wraps
+
 import discord
 import scrapper
 import deepl
 import config
 
 
+async def no_role_msg(message, args):
+    """this function is to reply any messages that are not associated with
+any commands.
+Usage: <your message that doesn't start with a command.>
+    """
+    await message.reply('Command not authorized, please make sure' +
+                        ' you have the required role for this command.')
+
+
+def restrict_roles(roles):
+    """Decorator to restrict the given command to a set of roles.
+    """
+    def wrapper(func):
+        @wraps(func)
+        async def actual_func(msg, args):
+            user_roles= {r.name.lower() for r in msg.author.roles}
+            if user_roles.intersection(roles) or is_admin(message):
+                return await func(msg, args)
+            return await no_role_msg(msg, args)
+        return actual_func
+    return wrapper
+
+
 def is_admin(message):
     is_admin = False
     if message.channel.guild.id in config.admin_guilds:
         is_admin = True
+
+    user_roles= {r.name.lower() for r in message.author.roles}
+    if user_roles.intersection(config.admin_roles):
+        is_admin = True
+
     # thevoidzero's userID since I may have to test things here and there.
     if message.author.id == int(os.getenv('VOIDZERO_ID')):
         # if I want to test as non admin user then `B!` will work.
@@ -24,6 +54,11 @@ def is_admin(message):
 
 def is_privileged(message):
     is_privileged = is_admin(message)
+
+    user_roles= {r.name.lower() for r in message.author.roles}
+    if user_roles.intersection(config.privileged_roles):
+        is_privileged = True
+
     return (is_privileged or
             message.channel.guild.id in config.privileged_guilds)
 
@@ -108,5 +143,3 @@ def get_images(message):
         yield temp_img_file
     if message.reference:
         yield from get_images(message.reference.resolved)
-    
-    
