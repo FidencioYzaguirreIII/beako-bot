@@ -60,12 +60,11 @@ def get_status(chapter=None):
         status = json.load(r)
     if len(status) == 0:
         return 'Status not Available'
-    else:
-        status_string = ''
+
     if chapter is not None:
         if chapter not in status:
             return f'No Status for requested chapter: {chapter}'
-
+        status_string = f'Chapter-{chapter}:'
         for work, data in status[chapter]["assignments"].items():
             status_string += f'\n  {work}:'
             for sec, status in data.items():
@@ -76,6 +75,7 @@ def get_status(chapter=None):
                 except KeyError:
                     status_string += '----'
     else:
+        status_string = ''
         for chap, stat in status.items():
             status_string += f'\nChapter-{chap}: {stat["status"]}'
         
