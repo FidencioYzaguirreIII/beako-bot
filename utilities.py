@@ -26,7 +26,7 @@ def restrict_roles(roles):
         @wraps(func)
         async def actual_func(msg, args):
             user_roles= {r.name.lower() for r in msg.author.roles}
-            if user_roles.intersection(roles) or is_admin(message):
+            if user_roles.intersection(roles) or is_admin(msg):
                 return await func(msg, args)
             return await no_role_msg(msg, args)
         return actual_func
