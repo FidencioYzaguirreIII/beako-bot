@@ -65,10 +65,8 @@ def get_status(chapter=None):
     if chapter is not None:
         if chapter not in status:
             return f'No Status for requested chapter: {chapter}'
-        status = {chapter: status[chapter]}
-    for chap, stat in status.items():
-        status_string += f'\nChapter-{chap}: {stat["status"]}'
-        for work, data in stat["assignments"].items():
+
+        for work, data in status[chapter]["assignments"].items():
             status_string += f'\n  {work}:'
             for sec, status in data.items():
                 status_string += f'\n    Section-{sec}: '
@@ -77,6 +75,10 @@ def get_status(chapter=None):
                         f'({status["assignee"]}); '
                 except KeyError:
                     status_string += '----'
+    else:
+        for chap, stat in status.items():
+            status_string += f'\nChapter-{chap}: {stat["status"]}'
+        
     return status_string
 
 
