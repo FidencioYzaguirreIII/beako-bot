@@ -8,7 +8,7 @@ import selenium
 from selenium import webdriver
 from dotenv import load_dotenv
 import config
-from replacements import replace as preprocess
+import replacements
 
 MAX_DELAY_SEC = 120
 MIN_DELAY_SEC = 5
@@ -96,7 +96,8 @@ def replace_words(text):
             rep = json.load(r)
 
     text = re.sub(r'\n\n+', '\n\n', text)
-    text = preprocess(text, rep)
+    replacements.initialize(text, rep)
+    text = replacements.replace()
     return text
 
 

@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import re
 import sys
 import json
@@ -121,7 +122,23 @@ def main(input_file, rep_file):
     with open(rep_file,'r', encoding='utf-8') as r:
         rep = json.load(r)
 
-        
+    replace()    
+    out_file = out_filename(input_file)
+    with open(out_file, 'w', encoding='utf-8') as w:
+        w.write(text)
+
+    print(f'Output written to: {out_file}')
+
+
+def initialize(input_text, replacements):
+    global text, rep
+    text = input_text
+    rep = replacements
+    return
+
+
+def replace():
+    global text, rep
     rules = [
         # title, json_key, is_name, replace_name, no_honorifics
         ('Special', 'specials', False),
@@ -164,11 +181,7 @@ def main(input_file, rep_file):
     time_end = time.time()
     print(f'Total Replacements: {total_replacements}')
     print(f'Time Taken: {time_end-time_start} seconds')
-    out_file = out_filename(input_file)
-    with open(out_file, 'w', encoding='utf-8') as w:
-        w.write(text)
-
-    print(f'Output written to: {out_file}')
+    return text
 
 
 if __name__ == '__main__':
