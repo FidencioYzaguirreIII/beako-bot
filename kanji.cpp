@@ -4,7 +4,7 @@
 int main(int argc, char *argv[]){
     tesseract::TessBaseAPI *api = new tesseract::TessBaseAPI();
 // Initialize tesseract-ocr with Japanese, without specifying tessdata path
-    if (api->Init(NULL, "jpn")) {
+    if (api->Init("./tessdata_best/", "jpn")) {
         fprintf(stderr, "Could not initialize tesseract.\n");
         exit(1);
     }

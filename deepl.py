@@ -16,7 +16,7 @@ MIN_DELAY_SEC = 5
 web = None
 log_file = os.path.expanduser("~/otto.log")
 
-replacements = os.path.join(config.root_path, 'replacements.json')
+replacements_json = os.path.join(config.root_path, 'replacements.json')
 
 load_dotenv(dotenv_path=os.path.join(config.root_path, '.env'))
 
@@ -46,7 +46,7 @@ async def init_web():
         desired_capabilities=webdriver.DesiredCapabilities.FIREFOX)
 
     print('Loading deepl website.')
-    web.get('https://www.deepl.com/translator')
+    web.get('https://www.deepl.com/translator?il=en#ja/en/')
     await asyncio.sleep(10)
     try:
         cookieBtn = web.find_element_by_class_name(
@@ -89,10 +89,10 @@ async def process_text(text):
 
 
 def replace_words(text):
-    if replacements == '' or not os.path.isfile(replacements):
+    if replacements_json == '' or not os.path.isfile(replacements_json):
         rep = dict()
     else:
-        with open(replacements, 'r') as r:
+        with open(replacements_json, 'r') as r:
             rep = json.load(r)
 
     text = re.sub(r'\n\n+', '\n\n', text)
