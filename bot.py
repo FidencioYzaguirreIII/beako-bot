@@ -29,8 +29,9 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    if message.author == client.user:
-        return
+    # if message.author == client.user:
+    #     return
+    # just a hack to make itself give command to self.
     m = config.bot_pattern.match(message.content.lower())
     if not m:
         return
@@ -123,10 +124,10 @@ async def send_chapter_alert(chap_num, chap_url):
     for g in servers:
         channel = filter(lambda c: c.name in ['general'], g.channels)
         for c in channel:
-            await c.send("<@&846779183303491625> chapter-" +
+            await c.send(config.inform_guilds[g.id] + " chapter-" +
                          f"{chap_num} has been released. ")
             code = "/".join(chap_url.split("/")[-3:-1])
-            await c.send(f"use command `b! mtl {code}` to get the MTL.")
+            await c.send(f"b! mtl {code}")
             print(f'msg sent to:{c.name} of {g.name}')
 
 

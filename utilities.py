@@ -42,8 +42,8 @@ def is_admin(message):
     if user_roles.intersection(config.admin_roles):
         is_admin = True
 
-    # thevoidzero's userID since I may have to test things here and there.
-    if message.author.id == int(os.getenv('VOIDZERO_ID')):
+    # bot's userID to be able to give itself admin command evereywhere.
+    if message.author.id == int(os.getenv('BOT_ID')):
         # if I want to test as non admin user then `B!` will work.
         if message.content[0] == 'B':
             is_admin = False
