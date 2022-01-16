@@ -14,7 +14,7 @@ MAX_DELAY_SEC = 120
 MIN_DELAY_SEC = 5
 #webdriver.Firefox(executable_path='/usr/local/bin/geckodriver')
 web = None
-log_file = os.path.expanduser("~/otto.log")
+log_file = os.path.expanduser("~/beako.log")
 
 replacements_json = os.path.join(config.root_path, 'replacements.json')
 

@@ -1,26 +1,142 @@
 {
   "specials": {
     "血命の儀": "Lifeblood Ritual",
-    "『暴食』": "Gluttony",
+    "魔女教": "Witch Cult",
+    "魔女因子": "Witch Factor",
+    "魔女の残り香": "Witch's Lingering Scent",
+    "魔女の香": "Witch's Scent",
+    "瘴気": "Miasma",
+    "大罪": "Sin Archbishop",
     "『魔女』": "Witch",
+    "魔女": "Witch",
+    "『魔人』": "Warlock",
+    "魔人": "warlock",
+    "『暴食』": "Gluttony",
+    "暴食": "Gluttony",
+    "『憤怒』": "Wrath",
+    "憤怒": "Wrath",
+    "『色欲』": "Lust",
+    "色欲": "Lust",
+    "『傲慢』": "Pride",
+    "傲慢": "Pride",
+    "『怠惰』": "Sloth",
+    "怠惰": "Sloth",
+    "『強欲』": "Greed",
+    "強欲": "Greed",
+    "『嫉妬』": "Envy",
+    "嫉妬": "Envy",
+    "権能": "Authority",
+    "魔獣": "Witchbeast",
+    "賢人会": "Council of Wise Men",
+    "賢人": "Sage",
+    "大賢人": "Great Sage",
+    "日食": "Solar Eclipse",
+    "月食": "Lunar Eclipse",
+    "アイスブランド・アーツ、アイシクルライン": "Ice Brand Arts: Icicle Line",
+    "氷の兵隊": "Ice Soldiers",
+    "絶対零度": "Absolute Zero",
+    "アイスブランド・アーツ": "Ice Brand Arts",
+    "コル・リオニス": "Cor Leonis",
+    "インビジブル・プロヴィデンス": "Invisible Providence",
+    "見えざる手": "Unseen Hand",
+    "百人一太刀": "One Blow, One Hundred Felled",
+    "扉渡り": "Door Crossing",
+    "エル・": "El ",
+    "ウル・": "Ul ",
+    "アル・": "Al ",
+    "フーラ": "Fula",
+    "ドーナ": "Dona",
+    "ヒューマ": "Huma",
+    "ゴーア": "Goa",
+    "シャマク": "Shamak",
+    "ネクト": "Nect",
+    "ミーニャ": "Minya",
+    "ジワルド": "Jiwald",
+    "ムラク": "Murak",
+    "ヴィータ": "Vita",
+    "クラリスタ": "Clarista",
+    "クラウゼリア": "Clauseria",
+    "クランヴェル": "Kranvel",
+    "復元魔法": "Restoration Magic",
+    "不死王の秘蹟": "Sacrament of the Immortal King",
+    "共感覚": "Synesthesia",
     "姉上": "Ane-ue",
     "兄上": "Ani-ue",
-    "旦那くん": "Husband-kun"
+    "旦那くん": "Mister",
+    "奥さん":"Missus",
+    "姪っ子ちゃん":"Niece-y",
+    "村長くん":"Mr. Chief",
+    "仮面の若僧":"masked young'un",
+    "鬼面": "Oni mask",
+    "エルギーナ": "Elgina",
+    "斑王犬": "Spotted Rex",
+    "黒翼鼠": "Blackwinged Mice",
+    "一角獣": "Unicorn",
+    "砂蚯蚓": "Sand Earthworm",
+    "花魁熊": "Courtesan Bear",
+    "ファロー車":"Falo Cart",
+    "ファロー": "Falo",
+    "勇牛": "Brave Ox",
+    "ライガー": "Liger",
+    "ガイラス": "Gyras",
+    "竜車": "Dragon Carriage",
+    "牛車": "Ox Cart",
+    "犬車": "Canine Cart",
+    "背負子": "wooden rack",
+    "火の魔石": "Fire Magic Stones",
+    "誓約": "oath",
+    "盟約": "covenant",
+    "契約": "contract",
+    "辺境伯": "Margrave",
+    "騎士の中の騎士": "Knight Amongst Knights",
+    "『最優』の騎士": "Finest of Knights",
+    "最優の騎士": "Finest of Knights",
+    "ゴージャス・タイガー": "Gorgeous Tiger",
+    "青き雷光": "(The) Blue Lightning",
+    "精霊喰らい": "(The) Spirit Eater",
+    "悪辣翁": "(The) Wily Old Man",
+    "白蜘蛛": "(The) White Spider",
+    "獅子騎士": "(The) Lion Knight",
+    "呪具師": "(The) Master of Enchanted Items",
+    "極彩色": "(The) Flamboyant",
+    "鋼人": "(The) Steelman",
+    "飛竜将": "(The) Flying Dragon General",
+    "星詠み": "Stargazer",
+    "女好き": "Woman Lover",
+    "九神将": "Nine Divine Generals",
+    "ルグニカ王国":"Kingdom of Lugunica",
+    "ルグニカ":"Lugunica",
+    "プリステラ":"Pristella",
+    "ミルーラ":"Mirula",
+    "アウグリア砂丘":"Augria Sand Dunes",
+    "砂風":"Sand Wind",
+    "砂海":"Sand Sea",
+    "魔女の祠":"Witch's Shrine",
+    "リーファウス平原":"Lifaus Plains",
+    "リーファウス街道":"Lifaus Highway",
+    "神聖ヴォラキア帝国":"Sacred Vollachian Empire",
+    "ヴォラキア帝国":"Vollachian Empire",
+    "ヴォラキア":"Vollachia",
+    "バドハイム密林":"Buddheim Jungle",
+    "バドハイム":"Buddheim",
+    "シュドラクの民":"People of Shudraq",
+    "シュドラク":"Shudraq",
+    "グァラル":"Guaral",
+    "カオスフレーム":"Chaosflame",
+    "魔都":"Demon City",
+    "剣奴孤島":"Gladiator Island",
+    "観覧者": "Observers",
+    "凡愚": "foolish commoner"
   },
   "basic": {
     "　": " ",
     "「": "\"",
     "」": "\"",
     "―": "-",
-    "『": "\"",
-    "』": "\"",
-    "△▼△▼△▼△": "*******"
+    "『": "«",
+    "』": "»"
   },
-  "names": {
-    "Natsumi Schwartz": [
-      "ナツミ",
-      "シュバルツ"
-    ],
+    "names": {
     "Alviero Juukulius": [
       "アルビエロ",
       "ユークリウス"
@@ -65,7 +181,7 @@
       "ブンガム",
       "イースタン"
     ],
-    "Capella Emerada Lugnica": [
+    "Capella Emerada Lugunica": [
       "カペラ",
       "エメラダ",
       "ルグニカ"
@@ -135,7 +251,7 @@
       "エルザ",
       "グランヒルテ"
     ],
-    "Emerada Lugnica": [
+    "Emerada Lugunica": [
       "エメラダ",
       "ルグニカ"
     ],
@@ -143,7 +259,7 @@
       "エッゾ",
       "カドナ"
     ],
-    "Farsale Lugnica": [
+    "Farsale Lugunica": [
       "ファルセイル",
       "ルグニカ"
     ],
@@ -155,11 +271,15 @@
       "フラム",
       "レメンディス"
     ],
-    "Ford Lugnica": [
+    "Flop O'Connell": [
+      "フラム",
+      "レメンディス"
+    ],
+    "Ford Lugunica": [
       "フォルド",
       "ルグニカ"
     ],
-    "Fourier Lugnica": [
+    "Fourier Lugunica": [
       "フーリエ",
       "ルグニカ"
     ],
@@ -192,7 +312,7 @@
       "ギャレク",
       "トンプソン"
     ],
-    "Garfiel Tinsel": [
+    "Garfiel Tinzel": [
       "ガーフィール",
       "ティンゼル"
     ],
@@ -200,7 +320,7 @@
       "ギリアン",
       "エンデュミオン"
     ],
-    "Gionis Lugnica": [
+    "Gionis Lugunica": [
       "ジオニス",
       "ルグニカ"
     ],
@@ -255,6 +375,10 @@
     "Ina Kallard": [
       "イーナ",
       "カラード"
+    ],
+    "Jamal Aurélie": [
+      "ジャマル",
+      "オーレリー"
     ],
     "Jorah Pendleton": [
       "ジョラー",
@@ -312,8 +436,8 @@
       "ログレス",
       "ハイアット"
     ],
-    "Louann Segmunt": [
-      "　ロウアン",
+    "Rowan Segmunt": [
+      "ロウアン",
       "セグムント"
     ],
     "Louanna Astrea": [
@@ -336,6 +460,10 @@
       "マカリスタ",
       "パーキン"
     ],
+    "Madeline Eschart": [
+      "マデリン",
+      "エッシャルト"
+    ],
     "Manfred Madison": [
       "マンフレッド",
       "マディソン"
@@ -356,6 +484,10 @@
       "メッカート",
       "カルステン"
     ],
+    "Medium O'Connell": [
+      "ミディアム",
+      "オコーネル"
+    ],
     "Meili Portroute": [
       "メィリィ",
       "ポートルート"
@@ -368,7 +500,7 @@
       "マイクロトフ",
       "マクマホン"
     ],
-    "Milde Irlam": [
+    "Milde Arlam": [
       "ミルデ",
       "アーラム"
     ],
@@ -376,7 +508,7 @@
       "ミミ",
       "パールバトン"
     ],
-    "Mogro Hagane": [
+    "Moguro Hagane": [
       "モグロ",
       "ハガネ"
     ],
@@ -395,6 +527,10 @@
     "Natsuki Subaru": [
       "ナツキ",
       "スバル"
+    ],
+    "Natsumi Schwartz": [
+      "ナツミ",
+      "シュバルツ"
     ],
     "Neiji Rockheart": [
       "ネイジ",
@@ -415,6 +551,10 @@
     "Otto Suwen": [
       "オットー",
       "スーウェン"
+    ],
+    "Petelgeuse Romanée-Conti": [
+      "ペテルギウス",
+      "ロマネコンティ"
     ],
     "Petra Leyte": [
       "ペトラ",
@@ -443,7 +583,7 @@
       "ラクシャ",
       "リッシュ"
     ],
-    "Randohal Lugnica": [
+    "Randohal Lugunica": [
       "ランドハル",
       "ルグニカ"
     ],
@@ -597,7 +737,7 @@
       "ヨルナ",
       "ミシグレ"
     ],
-    "Zabinel Lugnica": [
+    "Zabinel Lugunica": [
       "ザビーネル",
       "ルグニカ"
     ],
@@ -612,6 +752,7 @@
   },
   "single-names": {
     "Al": "アル",
+    "Aldebaran": "アルデバラン",
     "Alcor": "アルコル",
     "Arakiya": "アラキア",
     "Beatrice": "ベアトリス",
@@ -624,7 +765,7 @@
     "Clind": "クリンド",
     "Colette": "コレット",
     "Daphne": "ダフネ",
-    "Darts": "ダーツ",
+    "Dartz": "ダーツ",
     "Didorii": "ディドリー",
     "Dine": "ダイン",
     "Dorkell": "ドルケル",
@@ -639,6 +780,7 @@
     "Fortuna": "フォルトナ",
     "Frufoo": "フルフー",
     "Gaston": "ガストン",
+    "Gian": "ジャイアン",
     "Godrov": "ゴドロフ",
     "Halibel": "ハリベル",
     "Hector": "ヘクトール",
@@ -646,7 +788,6 @@
     "Holly": "ホーリィ",
     "Hornet": "ホーネット",
     "Ilya": "イリア",
-    "Jamal": "ジャマル",
     "Kalifa": "カリファ",
     "Korrina": "コリーナ",
     "Kuna": "クーナ",
@@ -671,6 +812,7 @@
     "Palmyra": "パルミラ",
     "Pandora": "パンドラ",
     "Patrasche": "パトラッシュ",
+    "Petelgeuse": "ペテルギウス",
     "Pooka": "プーカ",
     "Puck": "パック",
     "Quark": "クオーク",
@@ -742,7 +884,8 @@
     "先輩": "senpai",
     "先生": "sensei",
     "殿": "dono",
-    "上": "ue",
-    "たん": "tan"
+    "たん": "tan",
+    "妾":"私",
+    "ワシ":"私"
   }
 }
