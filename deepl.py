@@ -100,7 +100,7 @@ def replace_words(text):
     text = replacements.replace()
     return text
 
-
+#This function could used some refacotring with Deepl API
 async def translate(input_file, output_file, paid=False):
     with open(input_file, 'r') as r:
         filecontent = replace_words(r.read())
