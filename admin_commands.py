@@ -20,24 +20,7 @@ import deepl
 
 # adding all the commands to this as well
 from commands import *
-from privilege_commands import *L
-
-async def cmd_add(message, args):
-    """s the chapter to the database.
-Usage: add <chapter> <sections>
-Arguments:
-    <chapter> : chapter number.
-    <section> : number of sections in this chapter.
-"""
-    m = re.match(r'([0-9]+) ([0-9]+)', args)
-    if not m:
-        await message.reply("Incorrect formatting for the command.")
-    try:
-        chapter = int(m.group(1))
-        section = int(m.group(2))
-        await message.reply(new_chapter(chapter, section))
-    except ValueError:
-        await message.reply('Use numbers for chapters and sections')
+from privilege_commands import *
 
 
 async def cmd_deepl(message, args):

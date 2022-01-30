@@ -21,6 +21,7 @@ import deepl
 # adding all the commands to this as well
 from commands import *
 
+
 async def cmd_ncode(message, args):
     """Download the chapter from ncode website
 Usage: ncode <ncode-link>
