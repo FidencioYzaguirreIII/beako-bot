@@ -19,12 +19,6 @@ import utilities
 import scrapper
 import deepl
 
-
-if not os.path.isfile(config.status_file):
-    with open(config.status_file, 'w') as w:
-        w.write('{}')
-
-
 def extract_range(range_str):
     if range_str is None or range_str.strip() == '':
         return 'Empty chapter or section'
@@ -53,53 +47,6 @@ def get_chapter_section(chap_sec_str):
         return extract_range(m.group(1)), None
     else:
         return extract_range(m.group(1)), extract_range(m.group(2))
-
-
-def get_status(chapter=None):
-    with open(config.status_file, 'r') as r:
-        status = json.load(r)
-    if len(status) == 0:
-        return 'Status not Available'
-
-    if chapter is not None:
-        if chapter not in status:
-            return f'No Status for requested chapter: {chapter}'
-        status_string = f'**Chapter-{chapter}**:'
-        for work, data in status[chapter]["assignments"].items():
-            status_string += f'\n  {work}:'
-            for sec, status in data.items():
-                status_string += f'\n    Section-{sec}: '
-                try:
-                    status_string += f'{status["progress"]} ' +\
-                        f'({status["assignee"]}); '
-                except KeyError:
-                    status_string += '----'
-    else:
-        status_string = ''
-        for chap, stat in status.items():
-            status_string += f'\nChapter-{chap}: {stat["status"]}'
-        
-    return status_string
-
-
-def extract_range(range_str):
-    if range_str is None or range_str.strip() == '':
-        return 'Empty chapter or section'
-    ranges = range_str.split(',')
-    try:
-        for r in ranges:
-            if r.strip() == '':
-                continue
-            if '-' in r:
-                rng = r.split('-')
-                if len(rng) > 2:
-                    return 'Incorrect formatting, use valid range'
-                    raise SystemExit
-                yield from map(str, range(int(rng[0]), int(rng[1]) + 1))
-            else:
-                yield str(r)
-    except ValueError:
-        return 'Incorrect formatting: use integers for chapters and sections'
 
 
 async def cmd_hello(message, args):
