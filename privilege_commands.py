@@ -21,27 +21,6 @@ import deepl
 # adding all the commands to this as well
 from commands import *
 
-
-async def cmd_status(message, args):
-    """Current chapters progress and other things.
-Usage: status c<chapter>
-Arguments:
-    <chapter> : chapter number to see the status of. defaults to all,
-                use same format as cs string but section information is not used.
-"""
-    if args.strip() == '':
-        msg = get_status()
-    else:
-        try:
-            chap, sec = get_chapter_section(args.strip())
-            msg = ""
-            for c in chap:
-                msg += get_status(c) + '\n'
-        except ValueError:
-            message.reply('Incorrect Arguments to the command.')
-    await message.reply(msg)
-
-
 async def cmd_ncode(message, args):
     """Download the chapter from ncode website
 Usage: ncode <ncode-link>
