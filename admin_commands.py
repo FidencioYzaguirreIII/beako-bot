@@ -78,6 +78,7 @@ No arguments.
         await message.reply("Sorry there are no new chapters in the website.")
         return
 
+    mention = config.inform_guilds.get(message.guild.id)
     await message.reply(
         "<@&846779183303491625> The new chapter is out" +
         ", you can check it in the" +
